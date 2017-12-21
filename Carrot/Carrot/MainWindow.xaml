@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Carrot"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <Canvas x:Name="Board">
+        <Image x:Name="BG" HorizontalAlignment="Left" Height="524" Margin="-42,0,-50.6,-203.2" VerticalAlignment="Top" Width="611" Source="assets/bg1.png"/>
+
+    </Canvas>
 </Window>
