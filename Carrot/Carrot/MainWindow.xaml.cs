@@ -24,17 +24,19 @@ namespace Carrot
     {
         public string currentMap = "bg1.png";
         static Player player = new Player("Knedlik", "hrac", 100, 1, 1);
+        public int windowWidth = 525;
+        public int windowHeight = 350;
 
 
         public MainWindow()
         {
             InitializeComponent();
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            //this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             Render();
             //timer
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            TimeSpan interval = TimeSpan.FromMilliseconds(10);
+            TimeSpan interval = TimeSpan.FromMilliseconds(1);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
             //timer
@@ -42,6 +44,29 @@ namespace Carrot
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             Render();
+            CheckInputs();
+        }
+        public void CheckInputs()
+        {
+            /*if (e.Key == Key.Left)
+            {
+                player.X -= player.Velocity;
+            }
+            if (e.Key == Key.Right)
+            {
+                player.X += player.Velocity;
+            }*/
+            
+                Debug.WriteLine(player.X + player.Velocity + 60);
+                if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity+72) < windowWidth))
+                {
+                    player.X += player.Velocity;
+                }
+                if (((Keyboard.IsKeyDown(Key.A) || Keyboard.IsKeyDown(Key.Left))) && ((player.X - player.Velocity) > 0))
+                {
+                    player.X -= player.Velocity;
+                }
+            
         }
         public void Render()
         {
@@ -55,23 +80,12 @@ namespace Carrot
 
             Image image = new Image();
             image.Source = player.SpriteImage;
-            image.Height = 100;
+            image.Width = 60;
             Canvas.SetLeft(image, player.X);
             Canvas.SetTop(image, player.Y+125);
             //Panel.SetZIndex(image, 100);
             Board.Children.Add(image);
             
-        }
-        void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Left)
-            {
-                player.X -= player.Velocity;
-            }
-            if (e.Key == Key.Right)
-            {
-                player.X += player.Velocity;
-            }
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)
