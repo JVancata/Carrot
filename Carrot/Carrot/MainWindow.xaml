@@ -6,8 +6,15 @@
         xmlns:local="clr-namespace:Carrot"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Canvas x:Name="Board">
-        <Image x:Name="BG" HorizontalAlignment="Left" Height="524" Margin="-42,0,-50.6,-203.2" VerticalAlignment="Top" Width="611" Source="assets/bg1.png"/>
-
+    <Canvas>
+        <Button x:Name="Button1" Content="Nazdar" Canvas.Left="20" Canvas.Top="266" Height="45" Width="105" Panel.ZIndex="100" Click="Button1_Click"></Button>
+        <Button x:Name="Button2" Content="Nazdar" Canvas.Left="145" Canvas.Top="266" Height="45" Width="105" Panel.ZIndex="100" Click="Button2_Click"/>
+        <Button x:Name="Button3" Content="Nazdar" Canvas.Left="270" Canvas.Top="266" Height="45" Width="105" Panel.ZIndex="100" Click="Button3_Click"/>
+        <Button x:Name="Button4" Content="Nazdar" Canvas.Left="395" Canvas.Top="266" Height="45" Width="105" Panel.ZIndex="100" Click="Button4_Click"/>
+        <Canvas x:Name="Board">
+            <Image x:Name="BG" VerticalAlignment="Bottom" Height="325" Source="assets/bg1.png" />
+        </Canvas>
     </Canvas>
+
+
 </Window>
