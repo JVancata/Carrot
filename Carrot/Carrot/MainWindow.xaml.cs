@@ -22,9 +22,12 @@ namespace Carrot
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string currentMap = "bg1.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1);
-        public int windowWidth = 525;
+        public int currentMapNumber = 0;
+        public int maxMapNumber = 1;
+        public bool canSwitch = true;
+        public string currentMap = "bg0.png";
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        public int windowWidth = 1000;
         public int windowHeight = 350;
 
 
@@ -36,15 +39,37 @@ namespace Carrot
             //timer
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            TimeSpan interval = TimeSpan.FromMilliseconds(1);
+            TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
             //timer
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            Render();
             CheckInputs();
+            switchMaps();
+            Render();
+
+        }
+        public void switchMaps()
+        {
+            if(player.X <= 64 && currentMapNumber > 0 && canSwitch) {
+                currentMapNumber--;
+                player.X = windowWidth - 100;
+                canSwitch = false;
+            }
+            else if (player.X >= windowWidth-72-player.Velocity && currentMapNumber < maxMapNumber && canSwitch)
+            {
+                currentMapNumber++;
+                player.X = 100;
+                canSwitch = false;
+            }
+            else
+            {
+                canSwitch = true;
+            }
+            Debug.WriteLine(currentMapNumber);
+
         }
         public void CheckInputs()
         {
@@ -56,24 +81,24 @@ namespace Carrot
             {
                 player.X += player.Velocity;
             }*/
-            
-                Debug.WriteLine(player.X + player.Velocity + 60);
-                if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity+72) < windowWidth))
-                {
-                    player.X += player.Velocity;
-                }
-                if (((Keyboard.IsKeyDown(Key.A) || Keyboard.IsKeyDown(Key.Left))) && ((player.X - player.Velocity) > 0))
-                {
-                    player.X -= player.Velocity;
-                }
-            
+            //64 - 514
+            Debug.WriteLine(player.X);
+            if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity + 72) < windowWidth))
+            {
+                player.X += player.Velocity;
+            }
+            if (((Keyboard.IsKeyDown(Key.A) || Keyboard.IsKeyDown(Key.Left))) && ((player.X - player.Velocity) > 0))
+            {
+                player.X -= player.Velocity;
+            }
+
         }
         public void Render()
         {
             Board.Children.Clear();
 
             Image bg = new Image();
-            bg.Source = new BitmapImage(new Uri(@"assets/"+currentMap, UriKind.Relative));
+            bg.Source = new BitmapImage(new Uri(@"assets/" + "bg"+currentMapNumber+".png", UriKind.Relative));
             bg.Height = 350;
             //Panel.SetZIndex(bg, 1);
             Board.Children.Add(bg);
@@ -82,10 +107,9 @@ namespace Carrot
             image.Source = player.SpriteImage;
             image.Width = 60;
             Canvas.SetLeft(image, player.X);
-            Canvas.SetTop(image, player.Y+125);
+            Canvas.SetTop(image, player.Y + 150);
             //Panel.SetZIndex(image, 100);
             Board.Children.Add(image);
-            
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)

@@ -103,13 +103,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg1.png" />
+    <Resource Include="assets\bg1-old.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg2.png" />
+    <Resource Include="assets\bg2-old.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\player.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg0.png" />
+    <Resource Include="assets\bg1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
