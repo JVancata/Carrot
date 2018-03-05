@@ -29,13 +29,11 @@ namespace Carrot
         static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
         public int windowWidth = 1000;
         public int windowHeight = 350;
-
-
+        public List<NPC> NPCList = new List<NPC>();
         public MainWindow()
         {
             InitializeComponent();
-            //this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-            Render();
+            fillNpc();
             //timer
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -44,12 +42,15 @@ namespace Carrot
             dispatcherTimer.Start();
             //timer
         }
+        private void fillNpc()
+        {
+            NPCList.Add(new NPC("Bulmír", "npc", 0, 200, 0, 0));
+        }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             CheckInputs();
             switchMaps();
             Render();
-
         }
         public void switchMaps()
         {
@@ -69,18 +70,9 @@ namespace Carrot
                 canSwitch = true;
             }
             Debug.WriteLine(currentMapNumber);
-
         }
         public void CheckInputs()
         {
-            /*if (e.Key == Key.Left)
-            {
-                player.X -= player.Velocity;
-            }
-            if (e.Key == Key.Right)
-            {
-                player.X += player.Velocity;
-            }*/
             //64 - 514
             Debug.WriteLine(player.X);
             if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity + 72) < windowWidth))
@@ -91,25 +83,55 @@ namespace Carrot
             {
                 player.X -= player.Velocity;
             }
-
         }
+
+        public void MapInteraction()
+        {
+            switch (currentMapNumber)
+            {
+                case 0:
+                    StoryLabel.Content = "Zde začínáš";
+                    break;
+                case 1:
+                    StoryLabel.Content = "Zde pokračuješ";
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public void Render()
         {
             Board.Children.Clear();
-
+            MapInteraction();
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg"+currentMapNumber+".png", UriKind.Relative));
             bg.Height = 350;
             //Panel.SetZIndex(bg, 1);
             Board.Children.Add(bg);
 
-            Image image = new Image();
-            image.Source = player.SpriteImage;
-            image.Width = 60;
-            Canvas.SetLeft(image, player.X);
-            Canvas.SetTop(image, player.Y + 150);
+            Image playerImg = new Image();
+            playerImg.Source = player.SpriteImage;
+            playerImg.Width = 60;
+            Canvas.SetLeft(playerImg, player.X);
+            Canvas.SetTop(playerImg, player.Y + 150);
             //Panel.SetZIndex(image, 100);
-            Board.Children.Add(image);
+            Board.Children.Add(playerImg);
+
+            foreach(NPC npc in NPCList)
+            {
+                if(npc.Map == currentMapNumber)
+                {
+                    Image image = new Image();
+                    image.Source = npc.SpriteImage;
+                    image.Width = 60;
+                    Canvas.SetLeft(image, npc.X);
+                    Canvas.SetTop(image, npc.Y + 150);
+                    //Panel.SetZIndex(image, 100);
+                    Board.Children.Add(image);
+
+                }
+            }
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)

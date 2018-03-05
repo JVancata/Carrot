@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Carrot
 {
-    class Creature
+    public abstract class Creature
     {
         public string name;
         public string type;
