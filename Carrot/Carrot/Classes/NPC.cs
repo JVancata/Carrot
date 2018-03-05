@@ -7,22 +7,21 @@ using System.Windows.Media.Imaging;
 
 namespace Carrot
 {
-    class Player : Creature
+    public class NPC : Creature
     {
         private string spritePath;
         private BitmapImage sprite;
         private string defaultPath = "assets/";
-        private int velocity;
-        private int dmg;
-        public Player(string name, string type, int x, int y, int z, int velocity = 3, int dmg = 10, string sprite = "player.png")
+        private int map;
+        public NPC(string name, string type, int map, int x, int y, int z, string sprite = "player.png", bool direction = false)
         {
             this.name = name;
             this.type = type;
             this.x = x;
             this.y = y;
             this.z = z;
-            this.velocity = velocity;
-            this.dmg = dmg;
+            this.map = map;
+            this.direction = direction;
 
             this.Sprite = sprite;
         }
@@ -57,6 +56,17 @@ namespace Carrot
             set
             {
                 this.name = value;
+            }
+        }
+        public int Map
+        {
+            get
+            {
+                return this.map;
+            }
+            set
+            {
+                this.map = value;
             }
         }
         public string Type
@@ -103,15 +113,15 @@ namespace Carrot
                 this.z = value;
             }
         }
-        public int Velocity
+        public bool Direction
         {
             get
             {
-                return this.velocity;
+                return this.direction;
             }
             set
             {
-                this.velocity = value;
+                this.direction = value;
             }
         }
 

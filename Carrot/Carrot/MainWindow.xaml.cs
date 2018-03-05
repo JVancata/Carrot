@@ -22,9 +22,7 @@ namespace Carrot
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int currentMapNumber = 0;
-        public int maxMapNumber = 1;
-        public bool canSwitch = true;
+        public Game game = new Game();
         public string currentMap = "bg0.png";
         static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
         public int windowWidth = 1000;
@@ -44,7 +42,7 @@ namespace Carrot
         }
         private void fillNpc()
         {
-            NPCList.Add(new NPC("Bulmír", "npc", 0, 200, 0, 0));
+            NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -54,22 +52,23 @@ namespace Carrot
         }
         public void switchMaps()
         {
-            if(player.X <= 64 && currentMapNumber > 0 && canSwitch) {
-                currentMapNumber--;
-                player.X = windowWidth - 100;
-                canSwitch = false;
-            }
-            else if (player.X >= windowWidth-72-player.Velocity && currentMapNumber < maxMapNumber && canSwitch)
+            if (player.X <= 20 && game.currentMapNumber > 0 && game.canSwitch)
             {
-                currentMapNumber++;
-                player.X = 100;
-                canSwitch = false;
+                game.currentMapNumber--;
+                player.X = windowWidth - 100;
+                game.canSwitch = false;
+            }
+            else if (player.X >= windowWidth - 72 - player.Velocity && game.currentMapNumber < game.maxMapNumber && game.canSwitch)
+            {
+                game.currentMapNumber++;
+                player.X = 30;
+                game.canSwitch = false;
             }
             else
             {
-                canSwitch = true;
+                game.canSwitch = true;
             }
-            Debug.WriteLine(currentMapNumber);
+            Debug.WriteLine(game.currentMapNumber);
         }
         public void CheckInputs()
         {
@@ -78,26 +77,61 @@ namespace Carrot
             if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity + 72) < windowWidth))
             {
                 player.X += player.Velocity;
+                player.Direction = true;
             }
             if (((Keyboard.IsKeyDown(Key.A) || Keyboard.IsKeyDown(Key.Left))) && ((player.X - player.Velocity) > 0))
             {
                 player.X -= player.Velocity;
+                player.Direction = false;
             }
+        }
+
+        public void hideButtons()
+        {
+            Button1.Visibility = Visibility.Hidden;
+            Button2.Visibility = Visibility.Hidden;
+            Button3.Visibility = Visibility.Hidden;
+            Button4.Visibility = Visibility.Hidden;
         }
 
         public void MapInteraction()
         {
-            switch (currentMapNumber)
+            hideButtons();
+            switch (game.currentMapNumber)
             {
                 case 0:
-                    StoryLabel.Content = "Zde začínáš";
+                    if (!game.hasApple && game.storyPosition == 0 && game.arrivedOnSecondMap)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Seber jablko";
+                    }
                     break;
                 case 1:
-                    StoryLabel.Content = "Zde pokračuješ";
+                    game.arrivedOnSecondMap = true;
+                    if (!game.hasApple && game.storyPosition == 0)
+                    {
+                        game.currentMessage = "Bulmír chce jablko1!!!\nJinak Tě nepustí dál!";
+                    }
+                    if (game.hasApple && game.storyPosition == 1)
+                    {
+                        game.currentMessage = "Máš jablko, které Bulmír chce,\ndej mu ho a on Tě pustí dál.";
+                    }
+                    if(game.hasApple && game.storyPosition == 1 && player.x > 700)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Daj mu jablko";
+                    }
+                    if(game.storyPosition == 2)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Díky, brácho";
+                    }
+
                     break;
                 default:
                     break;
             }
+            StoryLabel.Content = game.currentMessage;
         }
 
         public void Render()
@@ -105,7 +139,7 @@ namespace Carrot
             Board.Children.Clear();
             MapInteraction();
             Image bg = new Image();
-            bg.Source = new BitmapImage(new Uri(@"assets/" + "bg"+currentMapNumber+".png", UriKind.Relative));
+            bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             bg.Height = 350;
             //Panel.SetZIndex(bg, 1);
             Board.Children.Add(bg);
@@ -113,30 +147,53 @@ namespace Carrot
             Image playerImg = new Image();
             playerImg.Source = player.SpriteImage;
             playerImg.Width = 60;
+            /*if(player.Direction)
+            {
+                var transform = new ScaleTransform(-1, 1, 0, 0);
+                playerImg.RenderTransform = transform;
+                if(player.X)
+            }*/
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
-            //Panel.SetZIndex(image, 100);
+            Panel.SetZIndex(playerImg, 100);
             Board.Children.Add(playerImg);
 
-            foreach(NPC npc in NPCList)
+            foreach (NPC npc in NPCList)
             {
-                if(npc.Map == currentMapNumber)
+                if (npc.Map == game.currentMapNumber)
                 {
                     Image image = new Image();
                     image.Source = npc.SpriteImage;
                     image.Width = 60;
                     Canvas.SetLeft(image, npc.X);
                     Canvas.SetTop(image, npc.Y + 150);
-                    //Panel.SetZIndex(image, 100);
                     Board.Children.Add(image);
-
                 }
             }
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-
+            if(game.currentMapNumber == 0 && game.storyPosition == 0)
+            {
+                if (!game.hasApple)
+                {
+                    game.hasApple = true;
+                    game.currentMessage = "Sebral jsi jablko";
+                    game.storyPosition++;
+                }
+            }
+            if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple)
+            {
+                game.hasApple = false;
+                game.storyPosition++;
+                game.currentMessage = "Hmmmm, fajnový jablko";
+            }
+            if (game.storyPosition == 2)
+            {
+                game.currentMessage = "Nz, pouštím Tě dál\n(nepouští, není to nakreslený)";
+                game.storyPosition++;
+            }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
