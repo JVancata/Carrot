@@ -14,8 +14,9 @@ namespace Carrot
         private string defaultPath = "assets/";
         private int velocity;
         private int dmg;
+        private int xp;
         
-        public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, string sprite = "player.png")
+        public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, string sprite = "player-right.png")
         {
             this.name = name;
             this.type = type;
@@ -127,6 +128,16 @@ namespace Carrot
                 this.direction = value;
             }
         }
-
+        public int Xp
+        {
+            get
+            {
+                return this.xp;
+            }
+            set
+            {
+                this.xp = value;
+            }
+        }
     }
 }

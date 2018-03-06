@@ -105,23 +105,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg1-old.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="assets\bg2-old.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="assets\player.png" />
+    <Resource Include="assets\player-left.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg0.png" />
-    <Resource Include="assets\bg1-old2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\npc.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="assets\bg1-old3.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="assets\bg1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\vlk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\character-kid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\player-right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

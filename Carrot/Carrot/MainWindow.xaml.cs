@@ -24,7 +24,7 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 3);
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
@@ -33,6 +33,9 @@ namespace Carrot
             InitializeComponent();
             fillNpc();
             //timer
+            
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
@@ -40,9 +43,30 @@ namespace Carrot
             dispatcherTimer.Start();
             //timer
         }
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.D1)
+            {
+                Button1_Click(null, null);
+            }
+            if (e.Key == Key.D2)
+            {
+                Button2_Click(null, null);
+            }
+            if (e.Key == Key.D3)
+            {
+                Button3_Click(null, null);
+            }
+            if (e.Key == Key.D4)
+            {
+                Button4_Click(null, null);
+            }
+        }
         private void fillNpc()
         {
             NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
+            //NPCList.Add(new NPC("Vlk", "monster", 2, 300, 0, 0, "vlk.png"));
+            NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -58,7 +82,7 @@ namespace Carrot
                 player.X = windowWidth - 100;
                 game.canSwitch = false;
             }
-            else if (player.X >= windowWidth - 72 - player.Velocity && game.currentMapNumber < game.maxMapNumber && game.canSwitch)
+            else if (player.X >= windowWidth - 72 - player.Velocity && game.currentMapNumber < game.currentMaxMapNumber && game.canSwitch)
             {
                 game.currentMapNumber++;
                 player.X = 30;
@@ -76,13 +100,21 @@ namespace Carrot
             Debug.WriteLine(player.X);
             if (((Keyboard.IsKeyDown(Key.D) || Keyboard.IsKeyDown(Key.Right))) && ((player.X + player.Velocity + 72) < windowWidth))
             {
-                player.X += player.Velocity;
+                player.X += game.sprinting ? (int)Math.Floor(player.Velocity * game.sprintSpeed) : player.Velocity;
                 player.Direction = true;
             }
             if (((Keyboard.IsKeyDown(Key.A) || Keyboard.IsKeyDown(Key.Left))) && ((player.X - player.Velocity) > 0))
             {
-                player.X -= player.Velocity;
+                player.X -= game.sprinting ? (int)Math.Floor(player.Velocity * game.sprintSpeed) : player.Velocity;
                 player.Direction = false;
+            }
+            if (((Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))))
+            {
+                game.sprinting = true;
+            }
+            else
+            {
+                game.sprinting = false;
             }
         }
 
@@ -100,7 +132,7 @@ namespace Carrot
             switch (game.currentMapNumber)
             {
                 case 0:
-                    if (!game.hasApple && game.storyPosition == 0 && game.arrivedOnSecondMap)
+                    if (!game.hasApple && game.arrivedOnSecondMap && player.X < 300 && player.X > 100)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Seber jablko";
@@ -110,23 +142,64 @@ namespace Carrot
                     game.arrivedOnSecondMap = true;
                     if (!game.hasApple && game.storyPosition == 0)
                     {
-                        game.currentMessage = "Bulmír chce jablko1!!!\nJinak Tě nepustí dál!";
+                        game.currentMessage = "Bulmír chce jablko!!!\nJinak Tě nepustí dál!";
+                    }
+                    if (!game.hasApple && game.storyPosition == 0 && player.X > 740)
+                    {
+                        player.X = 740;
                     }
                     if (game.hasApple && game.storyPosition == 1)
                     {
                         game.currentMessage = "Máš jablko, které Bulmír chce,\ndej mu ho a on Tě pustí dál.";
                     }
+                    if (game.storyPosition == 1 && player.X > 740)
+                    {
+                        player.X = 740;
+                    } 
                     if(game.hasApple && game.storyPosition == 1 && player.x > 700)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Daj mu jablko";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "*Udeř Bulmíra*";
                     }
                     if(game.storyPosition == 2)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Díky, brácho";
+
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Ještě aby ne";
+
+
+                        Button3.Visibility = Visibility.Visible;
+                        Button3.Content = "Pust mě dál, nebo tě zbiju";
+
+
+                        
                     }
 
+                    break;
+                case 2:
+                    if (game.storyPosition == 3 && player.X > 460)
+                    {
+                        player.X = 460;
+                    }
+                    if (game.storyPosition == 3 && player.X > 350)
+                    {
+                        game.currentMessage = "Aaaaa, pomoc, jsem malé dítě!\nMoji rodiče spadli do studny a nemůžou ven!";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Nasere";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Ok, pomůžu Ti";
+
+                        Button3.Visibility = Visibility.Visible;
+                        Button3.Content = "Hmmm a co já s tím?";
+                    }
                     break;
                 default:
                     break;
@@ -147,12 +220,14 @@ namespace Carrot
             Image playerImg = new Image();
             playerImg.Source = player.SpriteImage;
             playerImg.Width = 60;
-            /*if(player.Direction)
+            if(player.Direction)
             {
-                var transform = new ScaleTransform(-1, 1, 0, 0);
-                playerImg.RenderTransform = transform;
-                if(player.X)
-            }*/
+                player.Sprite = "player-right.png";
+            }
+            else
+            {
+                player.Sprite = "player-left.png";
+            }
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
             Panel.SetZIndex(playerImg, 100);
@@ -174,41 +249,74 @@ namespace Carrot
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            if(game.currentMapNumber == 0 && game.storyPosition == 0)
+            if(game.currentMapNumber == 0 && game.arrivedOnSecondMap)
             {
                 if (!game.hasApple)
                 {
                     game.hasApple = true;
                     game.currentMessage = "Sebral jsi jablko";
-                    game.storyPosition++;
+                    if(game.storyPosition == 0) game.storyPosition++;
                 }
             }
-            if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple)
+            else if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple)
             {
                 game.hasApple = false;
                 game.storyPosition++;
                 game.currentMessage = "Hmmmm, fajnový jablko";
             }
-            if (game.storyPosition == 2)
+            else if (game.storyPosition == 2)
             {
-                game.currentMessage = "Nz, pouštím Tě dál\n(nepouští, není to nakreslený)";
+                game.currentMessage = "Nz, pouštím Tě dál";
+                game.storyPosition++;
+                if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
+            }
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            {
+                game.currentMessage = "No docela jo, takže mi pomůžeš, blbečku\nStudna je směrem na východ!";
                 game.storyPosition++;
             }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-
+            if (game.storyPosition == 1)
+            {
+                game.currentMessage = "Achich ouvej, to bolí\nKdyž si Bulmíra praštil, sebral Ti jablko.";
+                game.hasApple = false;
+            }
+            if (game.storyPosition == 2)
+            {
+                game.currentMessage = "No jo, no jo, tak jdi dál";
+                game.storyPosition++;
+                if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
+            }
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            {
+                game.currentMessage = "Díky!!!\nStudna je směrem na východ!";
+                game.storyPosition++;
+            }
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
 
+            if (game.storyPosition == 2)
+            {
+                game.currentMessage = "Tvl, ty jsi vostrej, jdi dál";
+                game.storyPosition++;
+                if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
+
+            }
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            {
+                game.currentMessage = "No pomůžeš mi, jinak Tě nepustím dál!!!\nStudna je směrem na východ!";
+                game.storyPosition++;
+            }
         }
 
         private void Button4_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

@@ -9,13 +9,17 @@ namespace Carrot
     public class Game
     {
         public int currentMapNumber = 0;
-        public int maxMapNumber = 1;
+        public int maxMapNumber = 2;
+        public int currentMaxMapNumber = 1;
         public int storyPosition = 0;
         public bool canSwitch = true;
         public string currentMessage = "";
+        public bool sprinting = false;
+        public double sprintSpeed = 1.8;
 
         //game actions
         public bool hasApple = false;
+        public int appleChoice = 1;
         public bool arrivedOnSecondMap = false;
     }
 }
