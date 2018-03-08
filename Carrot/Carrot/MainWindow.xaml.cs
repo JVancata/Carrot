@@ -213,6 +213,7 @@ namespace Carrot
             MapInteraction();
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
+            Debug.WriteLine(bg.Source.ToString());
             bg.Height = 350;
             //Panel.SetZIndex(bg, 1);
             Board.Children.Add(bg);
