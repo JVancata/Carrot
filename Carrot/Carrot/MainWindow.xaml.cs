@@ -24,7 +24,7 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 3);
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
@@ -144,15 +144,11 @@ namespace Carrot
                     {
                         game.currentMessage = "Bulmír chce jablko!!!\nJinak Tě nepustí dál!";
                     }
-                    if (!game.hasApple && game.storyPosition == 0 && player.X > 740)
-                    {
-                        player.X = 740;
-                    }
                     if (game.hasApple && game.storyPosition == 1)
                     {
                         game.currentMessage = "Máš jablko, které Bulmír chce,\ndej mu ho a on Tě pustí dál.";
                     }
-                    if (game.storyPosition == 1 && player.X > 740)
+                    if (game.storyPosition <= 2 && player.X > 740)
                     {
                         player.X = 740;
                     } 
@@ -250,7 +246,7 @@ namespace Carrot
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            if(game.currentMapNumber == 0 && game.arrivedOnSecondMap)
+            if(game.currentMapNumber == 0 && game.arrivedOnSecondMap && player.X < 300 && player.X > 100)
             {
                 if (!game.hasApple)
                 {
@@ -259,41 +255,43 @@ namespace Carrot
                     if(game.storyPosition == 0) game.storyPosition++;
                 }
             }
-            else if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple)
+            else if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple && player.x > 700)
             {
                 game.hasApple = false;
                 game.storyPosition++;
                 game.currentMessage = "Hmmmm, fajnový jablko";
             }
-            else if (game.storyPosition == 2)
+            else if (game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "Nz, pouštím Tě dál";
                 game.storyPosition++;
                 if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
             }
-            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350)
             {
                 game.currentMessage = "No docela jo, takže mi pomůžeš, blbečku\nStudna je směrem na východ!";
+                game.currentMaxMapNumber++;
                 game.storyPosition++;
             }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            if (game.storyPosition == 1)
+            if (game.storyPosition == 1 && player.x > 700)
             {
                 game.currentMessage = "Achich ouvej, to bolí\nKdyž si Bulmíra praštil, sebral Ti jablko.";
                 game.hasApple = false;
             }
-            if (game.storyPosition == 2)
+            if (game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "No jo, no jo, tak jdi dál";
                 game.storyPosition++;
                 if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
             }
-            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350)
             {
                 game.currentMessage = "Díky!!!\nStudna je směrem na východ!";
+                game.currentMaxMapNumber++;
                 game.storyPosition++;
             }
         }
@@ -301,16 +299,17 @@ namespace Carrot
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
 
-            if (game.storyPosition == 2)
+            if (game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "Tvl, ty jsi vostrej, jdi dál";
                 game.storyPosition++;
                 if (game.currentMaxMapNumber < game.maxMapNumber) game.currentMaxMapNumber++;
 
             }
-            else if (game.currentMapNumber == 2 && game.storyPosition == 3)
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350)
             {
                 game.currentMessage = "No pomůžeš mi, jinak Tě nepustím dál!!!\nStudna je směrem na východ!";
+                game.currentMaxMapNumber++;
                 game.storyPosition++;
             }
         }
