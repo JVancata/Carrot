@@ -19,6 +19,7 @@ namespace Carrot
 
         //game actions
         public bool hasApple = false;
+        public bool hasBlueberry = false;
         public int appleChoice = 1;
         public bool arrivedOnSecondMap = false;
     }

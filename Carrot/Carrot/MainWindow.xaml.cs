@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Carrot.Classes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,14 +29,14 @@ namespace Carrot
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
+        public List<Monster> MonsterList = new List<Monster>();
         public MainWindow()
         {
             InitializeComponent();
+            player.Attack = new NormalAttack();
             fillNpc();
-            //timer
-            
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-            
+            //timer
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
@@ -65,8 +66,8 @@ namespace Carrot
         private void fillNpc()
         {
             NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
-            //NPCList.Add(new NPC("Vlk", "monster", 2, 300, 0, 0, "vlk.png"));
             NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
+            MonsterList.Add(new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png"));
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -179,9 +180,9 @@ namespace Carrot
 
                     break;
                 case 2:
-                    if (game.storyPosition == 3 && player.X > 460)
+                    if (game.storyPosition == 3 && player.X > 440)
                     {
-                        player.X = 460;
+                        player.X = 440;
                     }
                     if (game.storyPosition == 3 && player.X > 350)
                     {
@@ -195,6 +196,36 @@ namespace Carrot
 
                         Button3.Visibility = Visibility.Visible;
                         Button3.Content = "Hmmm a co já s tím?";
+                    }
+                    break;
+                case 3:
+                    if (game.storyPosition <= 5 && player.X > 370)
+                    {
+                        player.X = 370;
+                    }
+                    if (game.storyPosition == 4 && player.X > 300)
+                    {
+                        game.currentMessage = "Grrrrrrrrr, jsem vlk\nOdstup, nebo Tě eliminuji";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Nekřič, omg";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Aha";
+
+                        Button3.Visibility = Visibility.Visible;
+                        Button3.Content = "Já eliminuju Tebe";
+
+                        if (game.hasBlueberry)
+                        {
+                            Button4.Visibility = Visibility.Visible;
+                            Button4.Content = "*dej vlkovi borůvku*";
+                        }
+                    }
+                    if (game.storyPosition == 5 && player.X > 300)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*Udeř vlka*";
                     }
                     break;
                 default:
@@ -242,6 +273,19 @@ namespace Carrot
                     Board.Children.Add(image);
                 }
             }
+
+            foreach (Monster monster in MonsterList)
+            {
+                if (monster.Map == game.currentMapNumber && monster.HP > 0)
+                {
+                    Image image = new Image();
+                    image.Source = monster.SpriteImage;
+                    image.Width = 100;
+                    Canvas.SetLeft(image, monster.X);
+                    Canvas.SetTop(image, monster.Y + 150);
+                    Board.Children.Add(image);
+                }
+            }
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)
@@ -273,6 +317,24 @@ namespace Carrot
                 game.currentMaxMapNumber++;
                 game.storyPosition++;
             }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
+            {
+                game.currentMessage = "Woof! Wooof!";
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 5 && player.X > 300)
+            {
+                player.Attack.Attack(player, MonsterList[0]);
+                game.currentMessage = "Uhodil jsi vlka a sebral mu " + player.Dmg + "zdraví";
+                if(MonsterList[0].HP > 0)
+                {
+                    game.currentMessage+= "\nVlk Tě uhodil nazpět a sebral Ti" + MonsterList[0].Dmg + "životů\nVlkovi zbývá"+MonsterList[0].HP+"životů";
+                }
+                else
+                {
+                    game.currentMessage += "\nZabil si vlka.";
+                }
+            }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -282,7 +344,7 @@ namespace Carrot
                 game.currentMessage = "Achich ouvej, to bolí\nKdyž si Bulmíra praštil, sebral Ti jablko.";
                 game.hasApple = false;
             }
-            if (game.storyPosition == 2 && player.x > 700)
+            else if (game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "No jo, no jo, tak jdi dál";
                 game.storyPosition++;
@@ -292,6 +354,11 @@ namespace Carrot
             {
                 game.currentMessage = "Díky!!!\nStudna je směrem na východ!";
                 game.currentMaxMapNumber++;
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
+            {
+                game.currentMessage = "Jak jako aha?! Souboj na život a na smrt!";
                 game.storyPosition++;
             }
         }
@@ -312,11 +379,21 @@ namespace Carrot
                 game.currentMaxMapNumber++;
                 game.storyPosition++;
             }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
+            {
+                game.currentMessage = "Button 3.To si fakt myslíš? Pojď bojovat!";
+                game.storyPosition++;
+            }
         }
 
         private void Button4_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300 && game.hasBlueberry)
+            {
+                //boruvka
+                //game.currentMessage = "Button 3.To si fakt myslíš? Pojď bojovat!";
+                //game.storyPosition++;
+            }
         }
     }
 }

@@ -68,8 +68,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\IAttack.cs" />
     <Compile Include="Classes\Creature.cs" />
     <Compile Include="Classes\Game.cs" />
+    <Compile Include="Classes\Monster.cs" />
+    <Compile Include="Classes\NormalAttack.cs" />
+    <Compile Include="Classes\WolfAttack.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -105,7 +109,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\player-left.png" />
+    <Resource Include="assets\Player\player-left.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg0-og.png" />
@@ -123,13 +127,10 @@
     <Resource Include="assets\bg2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\vlk.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="assets\character-kid.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\player-right.png" />
+    <Resource Include="assets\Player\player-right.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg0.png" />
@@ -139,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\vlk-1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

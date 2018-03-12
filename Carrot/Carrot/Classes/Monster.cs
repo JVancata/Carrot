@@ -1,5 +1,4 @@
-﻿using Carrot.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,28 +7,24 @@ using System.Windows.Media.Imaging;
 
 namespace Carrot
 {
-    public class Player : Creature
+    public class Monster : Creature
     {
         private string spritePath;
         private BitmapImage sprite;
-        private string defaultPath = "assets/player/";
-        private int velocity;
+        private string defaultPath = "assets/";
         private int dmg;
-        private int xp;
         private int hp;
-        private IAttack attack;
-        public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, int hp = 100, string sprite = "player-right.png")
+        private int map;
+        public Monster(string name, string type, int map, int x, int y, int z, int dmg = 10, int hp = 100, string sprite = "vlk-1.png")
         {
             this.name = name;
             this.type = type;
             this.x = x;
             this.y = y;
             this.z = z;
-            this.velocity = velocity;
             this.dmg = dmg;
             this.hp = hp;
-            this.direction = direction;
-
+            this.map = map;
             this.Sprite = sprite;
         }
         public string Sprite
@@ -109,17 +104,6 @@ namespace Carrot
                 this.z = value;
             }
         }
-        public int Velocity
-        {
-            get
-            {
-                return this.velocity;
-            }
-            set
-            {
-                this.velocity = value;
-            }
-        }
         public bool Direction
         {
             get
@@ -131,15 +115,15 @@ namespace Carrot
                 this.direction = value;
             }
         }
-        public int XP
+        public int Map
         {
             get
             {
-                return this.xp;
+                return this.map;
             }
             set
             {
-                this.xp = value;
+                this.map = value;
             }
         }
         public int HP
@@ -162,17 +146,6 @@ namespace Carrot
             set
             {
                 this.dmg = value;
-            }
-        }
-        public IAttack Attack
-        {
-            get
-            {
-                return this.attack;
-            }
-            set
-            {
-                this.attack = value;
             }
         }
     }
