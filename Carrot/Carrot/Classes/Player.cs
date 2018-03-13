@@ -18,6 +18,7 @@ namespace Carrot
         private int xp;
         private int hp;
         private IAttack attack;
+        private int lvl;
         public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, int hp = 100, string sprite = "player-right.png")
         {
             this.name = name;
@@ -29,7 +30,6 @@ namespace Carrot
             this.dmg = dmg;
             this.hp = hp;
             this.direction = direction;
-
             this.Sprite = sprite;
         }
         public string Sprite
@@ -142,6 +142,28 @@ namespace Carrot
                 this.xp = value;
             }
         }
+        public void addXp(int xp)
+        {
+            int neededXp = (int)Math.Pow(this.lvl, 2);
+            int levelsAdded = (int)Math.Floor((double)(xp / neededXp));
+
+            if (levelsAdded == 1)
+            {
+                this.lvl++;
+                this.xp = xp - neededXp;
+            }
+            else if (levelsAdded > 1)
+            {
+                this.lvl++;
+                this.xp = xp - neededXp;
+                addXp(xp);
+            }
+            else
+            {
+                this.xp += xp;
+            }
+
+        }
         public int HP
         {
             get
@@ -162,6 +184,17 @@ namespace Carrot
             set
             {
                 this.dmg = value;
+            }
+        }
+        public int Lvl
+        {
+            get
+            {
+                return this.lvl;
+            }
+            set
+            {
+                this.lvl = value;
             }
         }
         public IAttack Attack

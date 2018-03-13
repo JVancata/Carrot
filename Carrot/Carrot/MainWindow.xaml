@@ -15,6 +15,7 @@
         <Canvas x:Name="Board">
             <Image x:Name="BG" VerticalAlignment="Bottom" Height="325" Source="assets/bg1.png" />
         </Canvas>
+        <ProgressBar x:Name="PlayerHP" Minimum="0" Maximum="100" Height="20" Canvas.Left="200" Canvas.Top="20" Width="200"/>
     </Canvas>
 
 

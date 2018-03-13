@@ -25,7 +25,7 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 3);
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
@@ -67,7 +67,9 @@ namespace Carrot
         {
             NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
             NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
-            MonsterList.Add(new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png"));
+            Monster vlk = new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png");
+            vlk.Attack = new WolfAttack();
+            MonsterList.Add(vlk);
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -196,6 +198,12 @@ namespace Carrot
 
                         Button3.Visibility = Visibility.Visible;
                         Button3.Content = "Hmmm a co já s tím?";
+
+                        if (game.hasApple)
+                        {
+                            Button4.Visibility = Visibility.Visible;
+                            Button4.Content = "*hoď po něm jablko*";
+                        }
                     }
                     break;
                 case 3:
@@ -238,6 +246,9 @@ namespace Carrot
         {
             Board.Children.Clear();
             MapInteraction();
+
+            PlayerHP.Value = player.HP;
+
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             Debug.WriteLine(bg.Source.ToString());
@@ -319,16 +330,22 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
             {
-                game.currentMessage = "Woof! Wooof!";
+                game.currentMessage = "Štěg!";
                 game.storyPosition++;
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 5 && player.X > 300)
             {
-                player.Attack.Attack(player, MonsterList[0]);
-                game.currentMessage = "Uhodil jsi vlka a sebral mu " + player.Dmg + "zdraví";
+
+                Random random = new Random();
+                int rand = random.Next(-2, 3);
+
+                player.Attack.Attack(player, MonsterList[0], rand);
+                game.currentMessage = "Uhodil jsi vlka a sebral mu " + (player.Dmg+rand) + " zdraví";
                 if(MonsterList[0].HP > 0)
                 {
-                    game.currentMessage+= "\nVlk Tě uhodil nazpět a sebral Ti" + MonsterList[0].Dmg + "životů\nVlkovi zbývá"+MonsterList[0].HP+"životů";
+                    rand = random.Next(-2, 3);
+                    game.currentMessage+= "\nVlk Tě uhodil nazpět a sebral Ti " + (MonsterList[0].Dmg+rand) + " životů\nVlkovi zbývá "+MonsterList[0].HP+" životů";
+                    MonsterList[0].Attack.Attack(player, MonsterList[0], rand);
                 }
                 else
                 {
@@ -381,7 +398,7 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
             {
-                game.currentMessage = "Button 3.To si fakt myslíš? Pojď bojovat!";
+                game.currentMessage = "Ani hovno, pojď bojovat!";
                 game.storyPosition++;
             }
         }
@@ -393,6 +410,12 @@ namespace Carrot
                 //boruvka
                 //game.currentMessage = "Button 3.To si fakt myslíš? Pojď bojovat!";
                 //game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350 && game.hasApple)
+            {
+                game.currentMessage = "Kiddo fucking dies!";
+                game.currentMaxMapNumber++;
+                game.storyPosition++;
             }
         }
     }

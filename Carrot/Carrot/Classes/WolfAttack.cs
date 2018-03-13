@@ -8,9 +8,8 @@ namespace Carrot.Classes
 {
     class WolfAttack : IAttack
     {
-        public void Attack(Player player, Monster monster)
-        {
-            player.HP = player.HP - monster.Dmg;
+        public void Attack(Player player, Monster monster, int random = 0)
+        {   player.HP = player.HP - (monster.Dmg + random);
         }
     }
 }

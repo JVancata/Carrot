@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Carrot.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Carrot
         private int dmg;
         private int hp;
         private int map;
+        private IAttack attack;
         public Monster(string name, string type, int map, int x, int y, int z, int dmg = 10, int hp = 100, string sprite = "vlk-1.png")
         {
             this.name = name;
@@ -145,7 +147,18 @@ namespace Carrot
             }
             set
             {
-                this.dmg = value;
+                this.dmg= value;
+            }
+        }
+        public IAttack Attack
+        {
+            get
+            {
+                return this.attack;
+            }
+            set
+            {
+                this.attack = value;
             }
         }
     }
