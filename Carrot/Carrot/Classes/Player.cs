@@ -1,6 +1,7 @@
 ﻿using Carrot.Classes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Carrot
         private int xp;
         private int hp;
         private IAttack attack;
-        private int lvl;
+        private int lvl = 1;
         public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, int hp = 100, string sprite = "player-right.png")
         {
             this.name = name;
@@ -142,26 +143,29 @@ namespace Carrot
                 this.xp = value;
             }
         }
-        public void addXp(int xp)
+        public void addXp(int xpToAdd)
         {
             int neededXp = (int)Math.Pow(this.lvl, 2);
-            int levelsAdded = (int)Math.Floor((double)(xp / neededXp));
-
+            //Debug.WriteLine("XP NEED: "+neededXp);
+            //Debug.WriteLine("XP HAD: " + this.xp);
+            //Debug.WriteLine("XP HAVE: " + this.xp);
+            int holder = this.xp + xpToAdd;
+            int levelsAdded = (int)Math.Floor((double)(holder / neededXp));
+            //Debug.WriteLine("LVL LEVELS ADDED: " + levelsAdded);
             if (levelsAdded == 1)
             {
                 this.lvl++;
-                this.xp = xp - neededXp;
+                this.xp += xpToAdd;
+                this.xp -= neededXp;
             }
             else if (levelsAdded > 1)
             {
                 this.lvl++;
-                this.xp = xp - neededXp;
+                this.xp += xpToAdd;
+                this.xp -= neededXp;
                 addXp(xp);
             }
-            else
-            {
-                this.xp += xp;
-            }
+            //Debug.WriteLine("XP have now: " + this.xp);
 
         }
         public int HP
