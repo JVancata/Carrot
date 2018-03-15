@@ -20,8 +20,12 @@ namespace Carrot
         private int hp;
         private IAttack attack;
         private int lvl = 1;
-        public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, int hp = 100, string sprite = "player-right.png")
+        private int width;
+        private int height;
+        public Player(string name, string type, int x, int y, int z, int velocity = 3, bool direction = true, int dmg = 10, int hp = 100, string sprite = "player-right.png", int height = 95, int width = 150)
         {
+            this.width = width;
+            this.height = height;
             this.name = name;
             this.type = type;
             this.x = x;
@@ -210,6 +214,28 @@ namespace Carrot
             set
             {
                 this.attack = value;
+            }
+        }
+        public int Width
+        {
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
             }
         }
     }

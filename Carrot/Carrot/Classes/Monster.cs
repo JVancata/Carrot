@@ -17,8 +17,12 @@ namespace Carrot
         private int hp;
         private int map;
         private IAttack attack;
-        public Monster(string name, string type, int map, int x, int y, int z, int dmg = 10, int hp = 100, string sprite = "vlk-1.png")
+        private int width;
+        private int height;
+        public Monster(string name, string type, int map, int x, int y, int z, int dmg = 10, int hp = 100, string sprite = "vlk-1.png", int height = 95, int width = 150)
         {
+            this.width = width;
+            this.height = height;
             this.name = name;
             this.type = type;
             this.x = x;
@@ -159,6 +163,28 @@ namespace Carrot
             set
             {
                 this.attack = value;
+            }
+        }
+        public int Width
+        {
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
             }
         }
     }

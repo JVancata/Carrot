@@ -25,7 +25,7 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 5);
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
@@ -240,6 +240,21 @@ namespace Carrot
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "*udeř vlka*";
                     }
+                    if(game.storyPosition == 6 && player.X > 500)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*vytáhni rodiče ze studny*";
+                    }
+                    if(game.storyPosition == 7 && player.X > 500)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Proč jste jako byli ve studně?";
+                    }
+                    if(game.storyPosition == 8 && player.X > 500)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Lol, aha";
+                    }
                     break;
                 default:
                     break;
@@ -262,7 +277,8 @@ namespace Carrot
 
             Image playerImg = new Image();
             playerImg.Source = player.SpriteImage;
-            playerImg.Width = 60;
+            playerImg.Height = player.Height;
+            playerImg.Width = player.Width;
             if(player.Direction)
             {
                 player.Sprite = "player-right.png";
@@ -282,7 +298,8 @@ namespace Carrot
                 {
                     Image image = new Image();
                     image.Source = npc.SpriteImage;
-                    image.Width = 60;
+                    image.Height = npc.Height;
+                    image.Width = npc.Width;
                     Canvas.SetLeft(image, npc.X);
                     Canvas.SetTop(image, npc.Y + 150);
                     Board.Children.Add(image);
@@ -295,7 +312,7 @@ namespace Carrot
                 {
                     Image image = new Image();
                     image.Source = monster.SpriteImage;
-                    image.Width = 100;
+                    image.Height = 95;
                     Canvas.SetLeft(image, monster.X);
                     Canvas.SetTop(image, monster.Y + 150);
                     Board.Children.Add(image);
@@ -303,20 +320,20 @@ namespace Carrot
             }
             int neededXp = (int)Math.Pow(player.Lvl, 2);
             Level.Content = player.name + " - " + player.Lvl + " Lvl. " + player.XP + "/" + neededXp + " Xp";
-            //Debug.WriteLine("Map: "+game.currentMapNumber );
+            //Debug.WriteLine("Map: "+ game.currentMapNumber );
             //Debug.WriteLine("Story: " + game.storyPosition);
 
         }
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            if(game.currentMapNumber == 0 && game.arrivedOnSecondMap && player.X < 300 && player.X > 100)
+            if (game.currentMapNumber == 0 && game.arrivedOnSecondMap && player.X < 300 && player.X > 100)
             {
                 if (!game.hasApple)
                 {
                     game.hasApple = true;
                     game.currentMessage = "Sebral jsi jablko";
-                    if(game.storyPosition == 0) game.storyPosition++;
+                    if (game.storyPosition == 0) game.storyPosition++;
                 }
             }
             else if (game.currentMapNumber == 1 && game.storyPosition == 1 && game.hasApple && player.x > 700)
@@ -350,11 +367,11 @@ namespace Carrot
                 int rand = random.Next(-2, 3);
 
                 player.Attack.Attack(player, MonsterList[0], rand);
-                game.currentMessage = "Uhodil jsi vlka a sebral mu " + (player.Dmg+rand) + " zdraví";
-                if(MonsterList[0].HP > 0)
+                game.currentMessage = "Uhodil jsi vlka a sebral mu " + (player.Dmg + rand) + " zdraví";
+                if (MonsterList[0].HP > 0)
                 {
                     rand = random.Next(-2, 3);
-                    game.currentMessage+= "\nVlk Tě uhodil nazpět a sebral Ti " + (MonsterList[0].Dmg+rand) + " životů\nVlkovi zbývá "+MonsterList[0].HP+" životů";
+                    game.currentMessage += "\nVlk Tě uhodil nazpět a sebral Ti " + (MonsterList[0].Dmg + rand) + " životů\nVlkovi zbývá " + MonsterList[0].HP + " životů";
                     MonsterList[0].Attack.Attack(player, MonsterList[0], rand);
                 }
                 else
@@ -363,6 +380,25 @@ namespace Carrot
                     game.storyPosition++;
                 }
             }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 6 && player.X > 500)
+            {
+                game.currentMessage = "Vytáhl jsi rodiče ze studny.";
+                NPCList.Add(new NPC("Táta", "npc", 3, 500, 0, 0, "father-right.png"));
+                NPCList.Add(new NPC("Máma", "npc", 3, 450, 0, 0, "mama2.png"));
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 7 && player.X > 500)
+            {
+                game.currentMessage = "Jsme tam spadli.";
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 3 && game.storyPosition == 8 && player.X > 500)
+            {
+                game.currentMessage = "No, každopádně díky moc.\nZískáváš 5xp";
+                game.storyPosition++;
+                game.currentMaxMapNumber++;
+                player.addXp(5);
+            };
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)

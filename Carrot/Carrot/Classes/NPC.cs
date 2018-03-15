@@ -13,8 +13,12 @@ namespace Carrot
         private BitmapImage sprite;
         private string defaultPath = "assets/";
         private int map;
-        public NPC(string name, string type, int map, int x, int y, int z, string sprite = "player.png", bool direction = false)
+        private int width;
+        private int height;
+        public NPC(string name, string type, int map, int x, int y, int z, string sprite = "player.png", bool direction = false, int height = 95, int width = 150)
         {
+            this.width = width;
+            this.height = height;
             this.name = name;
             this.type = type;
             this.x = x;
@@ -122,6 +126,28 @@ namespace Carrot
             set
             {
                 this.direction = value;
+            }
+        }
+        public int Width
+        {
+            get
+            {
+                return this.width;
+            }
+            set
+            {
+                this.width = value;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
             }
         }
 
