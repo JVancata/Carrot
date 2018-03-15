@@ -112,16 +112,7 @@
     <Resource Include="assets\Player\player-left.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg0-og.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="assets\npc.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="assets\bg1-old3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="assets\bg1-og.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg2.png" />
@@ -131,9 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\Player\player-right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="assets\bg0.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\bg1.png" />
@@ -152,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\mama2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg0.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

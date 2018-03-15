@@ -248,7 +248,7 @@ namespace Carrot
                     if(game.storyPosition == 7 && player.X > 500)
                     {
                         Button1.Visibility = Visibility.Visible;
-                        Button1.Content = "Proč jste jako byli ve studně?";
+                        Button1.Content = "Proč jste tam jako byli?";
                     }
                     if(game.storyPosition == 8 && player.X > 500)
                     {
