@@ -25,11 +25,12 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 3);
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
         public List<Monster> MonsterList = new List<Monster>();
+        public int frame = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -79,16 +80,16 @@ namespace Carrot
         }
         public void switchMaps()
         {
-            if (player.X <= 20 && game.currentMapNumber > 0 && game.canSwitch)
+            if (player.X <= 10 && game.currentMapNumber > 0 && game.canSwitch)
             {
                 game.currentMapNumber--;
-                player.X = windowWidth - 100;
+                player.X = windowWidth - 110;
                 game.canSwitch = false;
             }
-            else if (player.X >= windowWidth - 72 - player.Velocity && game.currentMapNumber < game.currentMaxMapNumber && game.canSwitch)
+            else if (player.X >= windowWidth - 100 - player.Velocity && game.currentMapNumber < game.currentMaxMapNumber && game.canSwitch)
             {
                 game.currentMapNumber++;
-                player.X = 30;
+                player.X = 11;
                 game.canSwitch = false;
             }
             else
@@ -264,11 +265,11 @@ namespace Carrot
 
         public void Render()
         {
+            //Debug.WriteLine(player.X);
+
             Board.Children.Clear();
             MapInteraction();
-
-            PlayerHP.Value = player.HP;
-
+            
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             bg.Height = 350;
@@ -287,6 +288,18 @@ namespace Carrot
             {
                 player.Sprite = "player-left.png";
             }
+            frame++;
+            Image sun = new Image();
+            sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame/25))) + ".png", UriKind.Relative));
+            sun.Width = 100;
+            Canvas.SetLeft(sun, 20);
+            Canvas.SetTop(sun, 10);
+            Board.Children.Add(sun);
+            if (frame >= 99)
+            {
+                frame = 0;
+            }
+
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
             Panel.SetZIndex(playerImg, 100);
@@ -376,7 +389,8 @@ namespace Carrot
                 }
                 else
                 {
-                    game.currentMessage += "\nZabil si vlka.";
+                    game.currentMessage += "\nZabil si vlka. Získáváš 8xp";
+                    player.addXp(8);
                     game.storyPosition++;
                 }
             }
@@ -396,7 +410,7 @@ namespace Carrot
             {
                 game.currentMessage = "No, každopádně díky moc.\nZískáváš 5xp";
                 game.storyPosition++;
-                game.currentMaxMapNumber++;
+                game.currentMaxMapNumber+=2;
                 player.addXp(5);
             };
         }
@@ -468,7 +482,8 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 4 && player.X > 300)
             {
-                game.currentMessage = "Cože, borůvku? Ty si někdy viděl žrát vlka borůvku?\nAle dík, bro. Nebudeme fightit.";
+                game.currentMessage = "Cože, borůvku? Ty si někdy viděl žrát vlka borůvku?\nAle dík, bro. Nebudeme fightit.\nZískáváš 8xp";
+                player.addXp(8);
                 game.storyPosition+=2;
                 game.hasBlueberry = false;
             }

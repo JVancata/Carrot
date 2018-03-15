@@ -9,7 +9,7 @@ namespace Carrot
     public class Game
     {
         public int currentMapNumber = 0;
-        public int maxMapNumber = 4;
+        public int maxMapNumber = 5;
         public int currentMaxMapNumber = 1;
         public int storyPosition = 0;
         public bool canSwitch = true;

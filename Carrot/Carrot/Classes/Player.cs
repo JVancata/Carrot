@@ -150,24 +150,25 @@ namespace Carrot
         public void addXp(int xpToAdd)
         {
             int neededXp = (int)Math.Pow(this.lvl, 2);
-            //Debug.WriteLine("XP NEED: "+neededXp);
-            //Debug.WriteLine("XP HAD: " + this.xp);
-            //Debug.WriteLine("XP HAVE: " + this.xp);
+            Debug.WriteLine("XP NEED: "+neededXp);
+            Debug.WriteLine("XP HAD: " + this.xp);
+            Debug.WriteLine("XP HAVE: " + this.xp);
             int holder = this.xp + xpToAdd;
             int levelsAdded = (int)Math.Floor((double)(holder / neededXp));
-            //Debug.WriteLine("LVL LEVELS ADDED: " + levelsAdded);
+            Debug.WriteLine("LVL LEVELS ADDED: " + levelsAdded);
             if (levelsAdded == 1)
             {
                 this.lvl++;
-                this.xp += xpToAdd;
-                this.xp -= neededXp;
+                this.xp += xpToAdd-neededXp;
             }
             else if (levelsAdded > 1)
             {
                 this.lvl++;
+                addXp(xpToAdd-neededXp);
+            }
+            else
+            {
                 this.xp += xpToAdd;
-                this.xp -= neededXp;
-                addXp(xp);
             }
             //Debug.WriteLine("XP have now: " + this.xp);
 

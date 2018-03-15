@@ -144,5 +144,18 @@
   <ItemGroup>
     <Resource Include="assets\bg0.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg5.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="assets\sun\sun0.png" />
+    <Resource Include="assets\sun\sun1.png" />
+    <Resource Include="assets\sun\sun2.png" />
+    <Resource Include="assets\sun\sun3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
