@@ -280,6 +280,11 @@ namespace Carrot
             Board.Children.Clear();
             MapInteraction();
             PlayerHP.Value = player.HP;
+            Canvas.SetLeft(PlayerHP, player.X+45);
+            Canvas.SetTop(PlayerHP, 130);
+
+
+
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             bg.Height = 350;
