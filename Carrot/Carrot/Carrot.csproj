@@ -73,6 +73,8 @@
     <Compile Include="Classes\Game.cs" />
     <Compile Include="Classes\Monster.cs" />
     <Compile Include="Classes\NormalAttack.cs" />
+    <Compile Include="Classes\SpecialKickAttack.cs" />
+    <Compile Include="Classes\BoarAttack.cs" />
     <Compile Include="Classes\WolfAttack.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -159,6 +161,18 @@
     <Resource Include="assets\sun\sun1.png" />
     <Resource Include="assets\sun\sun2.png" />
     <Resource Include="assets\sun\sun3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\beehive\hive0.png" />
+    <Resource Include="assets\beehive\hive1.png" />
+    <Resource Include="assets\beehive\hive2.png" />
+    <Resource Include="assets\beehive\hive3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\boar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

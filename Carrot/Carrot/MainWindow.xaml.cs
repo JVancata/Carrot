@@ -43,6 +43,9 @@ namespace Carrot
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
+            //game.currentMapNumber = 5;
+            //game.currentMaxMapNumber = 6;
+            //game.storyPosition = 12;
             //timer
         }
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -68,10 +71,15 @@ namespace Carrot
         {
             NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
             NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
-            NPCList.Add(new NPC("Metzen", "npc", 5, 800, 0, 0, "wizard-no-hat.png", false, 100, 160));
+            NPCList.Add(new NPC("Metzen", "npc", 5, 800, -25, 0, "wizard-no-hat.png", false, 120, 200));
+
             Monster vlk = new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png");
             vlk.Attack = new WolfAttack();
             MonsterList.Add(vlk);
+
+            Monster boar = new Monster("Boar", "monster", 6, 400, 20, 0, 10, 100, "boar.png", 80);
+            boar.Attack = new BoarAttack();
+            MonsterList.Add(boar);
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -326,20 +334,31 @@ namespace Carrot
             {
                 player.Sprite = "player-left.png";
             }
-            if(game.currentMapNumber < 4 || game.currentMapNumber > 5)
+
+            frame++;
+            if(game.currentMapNumber == 6)
             {
-                frame++;
+                Image hive = new Image();
+                hive.Source = new BitmapImage(new Uri(@"assets/beehive/" + "hive" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
+                hive.Width = 200;
+                Canvas.SetLeft(hive, 700);
+                Canvas.SetTop(hive, 101);
+                Board.Children.Add(hive);
+
+            }
+            if (game.currentMapNumber < 4 || game.currentMapNumber > 5)
+            {
+                
                 Image sun = new Image();
                 sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
                 sun.Width = 100;
                 Canvas.SetLeft(sun, 20);
                 Canvas.SetTop(sun, 10);
                 Board.Children.Add(sun);
-                if (frame >= 99)
-                {
-                    frame = 0;
-                }
-
+            }
+            if (frame >= 99)
+            {
+                frame = 0;
             }
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
@@ -366,7 +385,7 @@ namespace Carrot
                 {
                     Image image = new Image();
                     image.Source = monster.SpriteImage;
-                    image.Height = 95;
+                    image.Height = monster.Height;
                     Canvas.SetLeft(image, monster.X);
                     Canvas.SetTop(image, monster.Y + 150);
                     Board.Children.Add(image);
@@ -461,13 +480,14 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 5 && game.storyPosition == 10 && player.X > 700)
             {
-                game.currentMessage = "Nenechám Tě jít jentak. Tady máš knihu, dle které se můžeš naučit i speciální útok, kterým budeš moct ty zvířata porazit.";
+                game.currentMessage = "Nenechám Tě jít jentak. Tady máš knihu dle které se můžeš naučit i speciální útok, kterým budeš moct ty zvířata porazit.";
                 game.storyPosition++;
             }
             else if (game.currentMapNumber == 5 && game.storyPosition == 11 && player.X > 700)
             {
                 game.currentMessage = "Naučil jsi se kop s otočkou, který sice způsobí drasticky vyšší poškození, ale samotného Tě zraní.";
                 game.storyPosition++;
+                game.currentMaxMapNumber++;
             }
 
 
