@@ -133,6 +133,16 @@ namespace Carrot
         public void MapInteraction()
         {
             hideButtons();
+            if (game.hasBlueberry && game.storyPosition >= 5)
+            {
+                Button1.Visibility = Visibility.Visible;
+                Button1.Content = "*sněz borůvku*";
+            }
+            if (game.hasApple && game.storyPosition >= 5)
+            {
+                Button1.Visibility = Visibility.Visible;
+                Button1.Content = "*sněz jablko*";
+            }
             switch (game.currentMapNumber)
             {
                 case 0:
@@ -269,7 +279,7 @@ namespace Carrot
 
             Board.Children.Clear();
             MapInteraction();
-            
+            PlayerHP.Value = player.HP;
             Image bg = new Image();
             bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             bg.Height = 350;
@@ -288,18 +298,21 @@ namespace Carrot
             {
                 player.Sprite = "player-left.png";
             }
-            frame++;
-            Image sun = new Image();
-            sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame/25))) + ".png", UriKind.Relative));
-            sun.Width = 100;
-            Canvas.SetLeft(sun, 20);
-            Canvas.SetTop(sun, 10);
-            Board.Children.Add(sun);
-            if (frame >= 99)
+            if(game.currentMapNumber < 4 || game.currentMapNumber > 5)
             {
-                frame = 0;
-            }
+                frame++;
+                Image sun = new Image();
+                sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
+                sun.Width = 100;
+                Canvas.SetLeft(sun, 20);
+                Canvas.SetTop(sun, 10);
+                Board.Children.Add(sun);
+                if (frame >= 99)
+                {
+                    frame = 0;
+                }
 
+            }
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
             Panel.SetZIndex(playerImg, 100);
@@ -413,6 +426,7 @@ namespace Carrot
                 game.currentMaxMapNumber+=2;
                 player.addXp(5);
             };
+            
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
