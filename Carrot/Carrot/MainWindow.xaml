@@ -11,7 +11,7 @@
         <Button x:Name="Button2" Content="Nazdar" Canvas.Left="270" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button2_Click"/>
         <Button x:Name="Button3" Content="Nazdar" Canvas.Left="520" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button3_Click"/>
         <Button x:Name="Button4" Content="Nazdar" Canvas.Left="770" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button4_Click"/>
-        <Label x:Name="StoryLabel" Content="This is story label" Height="138" Width="538" Panel.ZIndex="100" RenderTransformOrigin="0.902,0.255" Canvas.Left="446" Canvas.Top="10" FontSize="24"></Label>
+        <TextBlock x:Name="StoryLabel" TextWrapping="Wrap"  Text="This is story label" Height="138" Width="538" Panel.ZIndex="100" RenderTransformOrigin="0.902,0.255" Canvas.Left="446" Canvas.Top="10" FontSize="24"></TextBlock>
         <Canvas x:Name="Board">
             <Image x:Name="BG" VerticalAlignment="Bottom" Height="325" Source="assets/bg1.png" />
         </Canvas>

@@ -150,7 +150,10 @@
   <ItemGroup>
     <Resource Include="assets\bg5.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="assets\wizard-hat.png" />
+    <Resource Include="assets\wizard-no-hat.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\sun\sun0.png" />
     <Resource Include="assets\sun\sun1.png" />

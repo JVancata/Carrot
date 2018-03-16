@@ -19,6 +19,7 @@ namespace Carrot
         private int xp;
         private int hp;
         private IAttack attack;
+        private IAttack secondAttack;
         private int lvl = 1;
         private int width;
         private int height;
@@ -217,6 +218,16 @@ namespace Carrot
                 this.attack = value;
             }
         }
+        public IAttack SecondAttack {
+            get
+            {
+                return this.secondAttack;
+            }
+            set
+            {
+                this.secondAttack = value;
+            }
+        }
         public int Width
         {
             get
@@ -238,6 +249,11 @@ namespace Carrot
             {
                 this.height = value;
             }
+        }
+        public void addHp(int hpToAdd)
+        {
+            if (this.hp + hpToAdd >= 100) this.hp = 100;
+            else this.hp += hpToAdd;
         }
     }
 }
