@@ -142,13 +142,13 @@ namespace Carrot
             hideButtons();
             if (game.hasBlueberry && game.storyPosition > 8 && player.HP < 100)
             {
-                Button1.Visibility = Visibility.Visible;
-                Button1.Content = "*sněz borůvku*";
+                Button4.Visibility = Visibility.Visible;
+                Button4.Content = "*sněz borůvku*";
             }
             if (game.hasApple && game.storyPosition > 8 && player.HP < 100)
             {
-                Button1.Visibility = Visibility.Visible;
-                Button1.Content = "*sněz jablko*";
+                Button4.Visibility = Visibility.Visible;
+                Button4.Content = "*sněz jablko*";
             }
             switch (game.currentMapNumber)
             {
@@ -199,8 +199,8 @@ namespace Carrot
                     }
                     if (game.storyPosition >= 4 && !game.hasBlueberry && player.X > 650 && player.X < 750)
                     {
-                        Button4.Visibility = Visibility.Visible;
-                        Button4.Content = "*seber borůvku*";
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*seber borůvku*";
                     }
                     break;
                 case 2:
@@ -301,17 +301,32 @@ namespace Carrot
                         Button1.Content = "*přečíst knihu*";
                     }
                     break;
+                case 6:
+                    //Debug.WriteLine("player: " + player.X);
+                    //Debug.WriteLine("boar: " + MonsterList[1].X);
+                    if (game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*udeř prase*";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "*kopni prase*";
+                    }
+                    break;
                 default:
                     break;
             }
             StoryLabel.Text = game.currentMessage;
         }
-        public bool BattleSystemClick(Monster monster, Player player, int exp)
+        public bool BattleSystemClick(Monster monster, Player player, int exp, int attackType)
         {
             Random random = new Random();
             int rand = random.Next(-2, 3);
 
-            int damageDone = player.Attack.Attack(player, monster, rand);
+            int damageDone = 0;
+            if (attackType == 0) damageDone = player.Attack.Attack(player, monster, rand);
+            else if (attackType == 1 && player.SecondAttack != null) damageDone = player.SecondAttack.Attack(player, monster, rand);
+
             game.currentMessage = "Uhodil jsi " + monster.Name + " a sebral mu " + damageDone + " zdraví";
             if (monster.HP > 0)
             {
@@ -357,6 +372,35 @@ namespace Carrot
             }
 
             frame++;
+
+            if (game.hasApple)
+            {
+                Image icon = new Image();
+                icon.Source = new BitmapImage(new Uri(@"assets/icons/" + "apple.png", UriKind.Relative));
+                icon.Width = 20;
+                Canvas.SetLeft(icon, 210);
+                Canvas.SetTop(icon, 30);
+                Board.Children.Add(icon);
+            }
+            if (game.hasBlueberry)
+            {
+                Image icon = new Image();
+                icon.Source = new BitmapImage(new Uri(@"assets/icons/" + "blueberry.png", UriKind.Relative));
+                icon.Width = 20;
+                Canvas.SetLeft(icon, 235);
+                Canvas.SetTop(icon, 30);
+                Board.Children.Add(icon);
+            }
+            if (game.hasHoney)
+            {
+                Image icon = new Image();
+                icon.Source = new BitmapImage(new Uri(@"assets/icons/" + "honey.png", UriKind.Relative));
+                icon.Width = 20;
+                Canvas.SetLeft(icon, 260);
+                Canvas.SetTop(icon, 30);
+                Board.Children.Add(icon);
+            }
+
             if (game.currentMapNumber == 6)
             {
                 Image hive = new Image();
@@ -365,7 +409,6 @@ namespace Carrot
                 Canvas.SetLeft(hive, 700);
                 Canvas.SetTop(hive, 101);
                 Board.Children.Add(hive);
-
             }
             if (game.currentMapNumber < 4 || game.currentMapNumber > 5)
             {
@@ -436,6 +479,11 @@ namespace Carrot
                 game.storyPosition++;
                 game.currentMessage = "Hmmmm, fajnový jablko";
             }
+            else if (game.currentMapNumber == 1 && game.storyPosition > 3 && player.X > 300 && !game.hasBlueberry)
+            {
+                game.hasBlueberry = true;
+                game.currentMessage = "Sebral jsi borůvku";
+            }
             else if (game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "Nz, pouštím Tě dál\nZískáváš 2 Xp";
@@ -456,7 +504,7 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 5 && player.X > 300)
             {
-                bool result = BattleSystemClick(MonsterList[0], player, 8);
+                bool result = BattleSystemClick(MonsterList[0], player, 8, 0);
                 if (result) game.storyPosition++;
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 6 && player.X > 500)
@@ -491,26 +539,18 @@ namespace Carrot
             else if (game.currentMapNumber == 5 && game.storyPosition == 11 && player.X > 700)
             {
                 game.currentMessage = "Naučil jsi se kop s otočkou, který sice způsobí drasticky vyšší poškození, ale samotného Tě zraní.";
+                player.SecondAttack = new SpecialKickAttack();
                 game.storyPosition++;
                 game.currentMaxMapNumber++;
             }
+            else if (game.currentMapNumber == 6 && game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
+            {
+                bool result = BattleSystemClick(MonsterList[1], player, 10, 0);
+                if (result) game.killedBoars++;
+            }
 
 
-            //everything else should be above the eating
-            //eating apple
-            else if (game.storyPosition > 8 && game.hasApple && player.HP < 100)
-            {
-                game.currentMessage = "Snědl jsi jablko. Obnovilo Ti 15% zdraví.";
-                game.hasApple = false;
-                player.addHp(15);
-            }
-            //eating blueberry
-            else if (game.storyPosition > 8 && game.hasBlueberry && player.HP < 100)
-            {
-                game.currentMessage = "Snědl jsi borůvku. Obnovila Ti 7% zdraví.";
-                game.hasBlueberry = false;
-                player.addHp(7);
-            }
+            
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -542,6 +582,11 @@ namespace Carrot
             {
                 game.currentMessage = "Pustím, mladíku. Ale musíš mi donést můj čepec.";
                 game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 6 && game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
+            {
+                bool result = BattleSystemClick(MonsterList[1], player, 10, 1);
+                if (result) game.killedBoars++;
             }
         }
 
@@ -576,12 +621,8 @@ namespace Carrot
 
         private void Button4_Click(object sender, RoutedEventArgs e)
         {
-            if (game.currentMapNumber == 1 && game.storyPosition > 3 && player.X > 300 && !game.hasBlueberry)
-            {
-                game.hasBlueberry = true;
-                game.currentMessage = "Sebral jsi borůvku";
-            }
-            else if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350 && game.hasApple)
+            
+            if (game.currentMapNumber == 2 && game.storyPosition == 3 && player.X > 350 && game.hasApple)
             {
                 game.currentMessage = "Sis moc nepomohl, stejně mi musíš pomoct.";
                 game.currentMaxMapNumber++;
@@ -594,6 +635,22 @@ namespace Carrot
                 player.addXp(8);
                 game.storyPosition += 2;
                 game.hasBlueberry = false;
+            }
+
+            //everything else should be above the eating
+            //eating apple
+            else if (game.storyPosition > 8 && game.hasApple && player.HP < 100)
+            {
+                game.currentMessage = "Snědl jsi jablko. Obnovilo Ti 15% zdraví.";
+                game.hasApple = false;
+                player.addHp(15);
+            }
+            //eating blueberry
+            else if (game.storyPosition > 8 && game.hasBlueberry && player.HP < 100)
+            {
+                game.currentMessage = "Snědl jsi borůvku. Obnovila Ti 7% zdraví.";
+                game.hasBlueberry = false;
+                player.addHp(7);
             }
         }
     }
