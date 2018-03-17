@@ -8,11 +8,13 @@ namespace Carrot.Classes
 {
     class SpecialKickAttack : IAttack
     {
-        public void Attack(Player player, Monster monster, int random = 0)
+        public int Attack(Player player, Monster monster, int random = 0)
         {
             int lvlDamage = player.Lvl * 4;
-            monster.HP -= (player.Dmg + lvlDamage + random);
+            int damageDone = (player.Dmg + lvlDamage + random);
+            monster.HP -= damageDone;
             player.HP -= player.Lvl > 20 ? 20 : player.Lvl;
+            return damageDone;
         }
     }
 }

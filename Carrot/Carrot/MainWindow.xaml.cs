@@ -172,8 +172,8 @@ namespace Carrot
                     if (game.storyPosition <= 2 && player.X > 740)
                     {
                         player.X = 740;
-                    } 
-                    if(game.hasApple && game.storyPosition == 1 && player.x > 700)
+                    }
+                    if (game.hasApple && game.storyPosition == 1 && player.x > 700)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Daj mu jablko";
@@ -181,7 +181,7 @@ namespace Carrot
                         Button2.Visibility = Visibility.Visible;
                         Button2.Content = "*udeř Bulmíra*";
                     }
-                    if(game.storyPosition == 2)
+                    if (game.storyPosition == 2)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Díky, brácho";
@@ -195,7 +195,7 @@ namespace Carrot
                         Button3.Content = "Pust mě dál, nebo tě zbiju";
 
 
-                        
+
                     }
                     if (game.storyPosition >= 4 && !game.hasBlueberry && player.X > 650 && player.X < 750)
                     {
@@ -257,17 +257,17 @@ namespace Carrot
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "*udeř vlka*";
                     }
-                    if(game.storyPosition == 6 && player.X > 500)
+                    if (game.storyPosition == 6 && player.X > 500)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "*vytáhni rodiče ze studny*";
                     }
-                    if(game.storyPosition == 7 && player.X > 500)
+                    if (game.storyPosition == 7 && player.X > 500)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Proč jste tam jako byli?";
                     }
-                    if(game.storyPosition == 8 && player.X > 500)
+                    if (game.storyPosition == 8 && player.X > 500)
                     {
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Lol, aha";
@@ -289,7 +289,8 @@ namespace Carrot
                         Button3.Content = "Jak ti můžu pomoct?";
 
                     }
-                    if (game.storyPosition == 10 && player.X > 700 ){
+                    if (game.storyPosition == 10 && player.X > 700)
+                    {
 
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "Oki";
@@ -305,7 +306,27 @@ namespace Carrot
             }
             StoryLabel.Text = game.currentMessage;
         }
+        public bool BattleSystemClick(Monster monster, Player player, int exp)
+        {
+            Random random = new Random();
+            int rand = random.Next(-2, 3);
 
+            int damageDone = player.Attack.Attack(player, monster, rand);
+            game.currentMessage = "Uhodil jsi " + monster.Name + " a sebral mu " + damageDone + " zdraví";
+            if (monster.HP > 0)
+            {
+                rand = random.Next(-2, 3);
+                damageDone = monster.Attack.Attack(player, monster, rand);
+                game.currentMessage += "\n" + monster.Name + " Tě uhodil nazpět a sebral Ti " + damageDone + " životů\n" + monster.Name + " zbývá " + monster.HP + " životů";
+                return false;
+            }
+            else
+            {
+                game.currentMessage += "\nZabil si " + monster.Name + ". Získáváš " + exp + "xp";
+                player.addXp(exp);
+                return true;
+            }
+        }
         public void Render()
         {
             //Debug.WriteLine(player.X);
@@ -313,7 +334,7 @@ namespace Carrot
             Board.Children.Clear();
             MapInteraction();
             PlayerHP.Value = player.HP;
-            Canvas.SetLeft(PlayerHP, player.X+45);
+            Canvas.SetLeft(PlayerHP, player.X + 45);
             Canvas.SetTop(PlayerHP, 140);
 
             Image bg = new Image();
@@ -326,7 +347,7 @@ namespace Carrot
             playerImg.Source = player.SpriteImage;
             playerImg.Height = player.Height;
             playerImg.Width = player.Width;
-            if(player.Direction)
+            if (player.Direction)
             {
                 player.Sprite = "player-right.png";
             }
@@ -336,7 +357,7 @@ namespace Carrot
             }
 
             frame++;
-            if(game.currentMapNumber == 6)
+            if (game.currentMapNumber == 6)
             {
                 Image hive = new Image();
                 hive.Source = new BitmapImage(new Uri(@"assets/beehive/" + "hive" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
@@ -348,7 +369,7 @@ namespace Carrot
             }
             if (game.currentMapNumber < 4 || game.currentMapNumber > 5)
             {
-                
+
                 Image sun = new Image();
                 sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
                 sun.Width = 100;
@@ -435,24 +456,8 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 5 && player.X > 300)
             {
-
-                Random random = new Random();
-                int rand = random.Next(-2, 3);
-
-                player.Attack.Attack(player, MonsterList[0], rand);
-                game.currentMessage = "Uhodil jsi vlka a sebral mu " + (player.Dmg + rand) + " zdraví";
-                if (MonsterList[0].HP > 0)
-                {
-                    rand = random.Next(-2, 3);
-                    game.currentMessage += "\nVlk Tě uhodil nazpět a sebral Ti " + (MonsterList[0].Dmg + rand) + " životů\nVlkovi zbývá " + MonsterList[0].HP + " životů";
-                    MonsterList[0].Attack.Attack(player, MonsterList[0], rand);
-                }
-                else
-                {
-                    game.currentMessage += "\nZabil si vlka. Získáváš 8xp";
-                    player.addXp(8);
-                    game.storyPosition++;
-                }
+                bool result = BattleSystemClick(MonsterList[0], player, 8);
+                if (result) game.storyPosition++;
             }
             else if (game.currentMapNumber == 3 && game.storyPosition == 6 && player.X > 500)
             {
@@ -587,7 +592,7 @@ namespace Carrot
             {
                 game.currentMessage = "Cože, borůvku? Ty si někdy viděl žrát vlka borůvku?\nAle dík, bro. Nebudeme fightit.\nZískáváš 8xp";
                 player.addXp(8);
-                game.storyPosition+=2;
+                game.storyPosition += 2;
                 game.hasBlueberry = false;
             }
         }

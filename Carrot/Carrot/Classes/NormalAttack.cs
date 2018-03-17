@@ -8,10 +8,12 @@ namespace Carrot.Classes
 {
     class NormalAttack : IAttack
     {
-        public void Attack(Player player, Monster monster, int random = 0)
+        public int Attack(Player player, Monster monster, int random = 0)
         {
             int lvlDamage = player.Lvl*2;
-            monster.HP = monster.HP - (player.Dmg + lvlDamage + random);
+            int damageDone = (player.Dmg + lvlDamage + random);
+            monster.HP = monster.HP - damageDone;
+            return damageDone;
         }
     }
 }

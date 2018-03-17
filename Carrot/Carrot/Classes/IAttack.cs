@@ -8,6 +8,6 @@ namespace Carrot.Classes
 {
     public interface IAttack
     {
-        void Attack(Player player, Monster monster, int random = 0);
+        int Attack(Player player, Monster monster, int random = 0);
     }
 }
