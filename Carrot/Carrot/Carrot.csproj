@@ -193,5 +193,8 @@
     <Resource Include="assets\bear-hat.png" />
     <Resource Include="assets\bear-no-hat.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\icons\hat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

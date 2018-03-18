@@ -47,7 +47,11 @@ namespace Carrot
             dispatcherTimer.Start();
             //game.currentMapNumber = 8;
             //game.currentMaxMapNumber = 8;
-            //game.storyPosition = 12;
+            //game.storyPosition = 13;
+            //player.Lvl = 20;
+            //game.hasHoney = true;
+            //game.hasBlueberry = true;
+            //game.hasApple = true;
             //timer
         }
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -211,6 +215,7 @@ namespace Carrot
 
 
                     }
+                    //blueberry
                     if (game.storyPosition >= 4 && !game.hasBlueberry && player.X > 650 && player.X < 750)
                     {
                         Button1.Visibility = Visibility.Visible;
@@ -314,10 +319,13 @@ namespace Carrot
                         Button1.Visibility = Visibility.Visible;
                         Button1.Content = "*přečíst knihu*";
                     }
+                    if (game.storyPosition == 31 && player.X > 700 && game.hasHat)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*dej mu čepec*";
+                    }
                     break;
                 case 6:
-                    Debug.WriteLine("player: " + player.X);
-                    //Debug.WriteLine("boar: " + MonsterList[1].X);
                     if (game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
                     {
                         Button1.Visibility = Visibility.Visible;
@@ -340,6 +348,146 @@ namespace Carrot
 
                         Button2.Visibility = Visibility.Visible;
                         Button2.Content = "*kopni netopýra*";
+                    }
+                    break;
+                case 8:
+                    //bear is stopping him
+                    if(game.storyPosition < 32 && player.X > 700)
+                    {
+                        player.X = 700;
+                    }
+                    if(game.storyPosition == 12 && player.X > 600)
+                    {
+                        game.currentMessage = "Brum brum, jsem MedVěd";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Čau, Méďo";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Pěkně hnusnej medvěd";
+
+                        Button3.Visibility = Visibility.Visible;
+                        Button3.Content = "Dej sem ten čepec!";
+                    }
+                    if (game.storyPosition == 14 && player.X > 600 && player.Lvl >= 10)
+                    {
+                        game.currentMessage = "No, to je lepší! Já jsem MedVěd!";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Čau, Méďo";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Pěkně hnusnej medvěd";
+
+                        Button3.Visibility = Visibility.Visible;
+                        Button3.Content = "Dej sem ten čepec!";
+                    }
+                    if (player.X > 575)
+                    {
+                        //ok
+                        if(game.storyPosition == 15)
+                        {
+                            game.currentMessage = "Čau, " + player.Name + ". Jak se máš?";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "V pohodě";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "Nic moc";
+
+                            Button3.Visibility = Visibility.Visible;
+                            Button3.Content = "Super, kámo";
+                        }
+                        else if(game.storyPosition == 16)
+                        {
+                            game.currentMessage = "Aha. A co potřebuješ?";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Ten čepec";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "Tvojí hučku";
+
+                            Button3.Visibility = Visibility.Visible;
+                            Button3.Content = "To, co máš na hlavě";
+                        }
+
+                        else if (game.storyPosition == 16)
+                        {
+                            game.currentMessage = "Co za to?";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Co chceš?";
+                        }
+                        else if(game.storyPosition == 17)
+                        {
+                            game.currentMessage = "Mám hlad. Dones mi něco dobrýho, ale ať je toho hodně.";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Tak fajn";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "*udeř méďu*";
+                        }
+                        //mean
+                        else if(game.storyPosition == 20)
+                        {
+                            game.currentMessage = "Sám seš hnusnej.";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Dej mi tu čepici";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = ":(";
+
+                        }
+                        else if (game.storyPosition == 21)
+                        {
+                            game.currentMessage = "Cože po mně chceš?";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Tu čepici";
+                        }
+                        else if (game.storyPosition == 22)
+                        {
+                            game.currentMessage = "Mám hlad. Dones mi něco dobrýho, ať je toho hodně, pak Ti jí možná dám.";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Tak fajn";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "*udeř méďu*";
+                        }
+                        //greedy
+                        else if (game.storyPosition == 25)
+                        {
+                            game.currentMessage = "Nedám.";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Pls";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "Prosím, méďo";
+
+                            Button3.Visibility = Visibility.Visible;
+                            Button3.Content = "Notak";
+                        }
+                        else if (game.storyPosition == 26)
+                        {
+                            game.currentMessage = "Mám hlad. Dones mi něco dobrýho, ať je toho hodně, pak Ti jí možná dám.";
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "Ok";
+
+                            Button2.Visibility = Visibility.Visible;
+                            Button2.Content = "*udeř méďu*";
+                        }
+                        else if (game.storyPosition == 30 && game.hasApple && game.hasBlueberry && game.hasHoney)
+                        {
+
+                            Button1.Visibility = Visibility.Visible;
+                            Button1.Content = "*podej mu to*";
+                        }
                     }
                     break;
                 default:
@@ -439,7 +587,15 @@ namespace Carrot
                 Canvas.SetTop(icon, 30);
                 Board.Children.Add(icon);
             }
-
+            if (game.hasHat)
+            {
+                Image icon = new Image();
+                icon.Source = new BitmapImage(new Uri(@"assets/icons/" + "hat.png", UriKind.Relative));
+                icon.Width = 20;
+                Canvas.SetLeft(icon, 285);
+                Canvas.SetTop(icon, 30);
+                Board.Children.Add(icon);
+            }
             if (game.currentMapNumber == 6)
             {
                 Image hive = new Image();
@@ -527,8 +683,8 @@ namespace Carrot
             }
             int neededXp = (int)Math.Pow(player.Lvl, 2);
             Level.Content = player.name + " - " + player.Lvl + " Lvl. " + player.XP + "/" + neededXp + " Xp";
-            //Debug.WriteLine("Map: "+ game.currentMapNumber );
-            //Debug.WriteLine("Story: " + game.storyPosition);
+            Debug.WriteLine("Map: "+ game.currentMapNumber );
+            Debug.WriteLine("Story: " + game.storyPosition);
 
         }
 
@@ -554,7 +710,7 @@ namespace Carrot
                 game.hasBlueberry = true;
                 game.currentMessage = "Sebral jsi borůvku";
             }
-            else if (game.storyPosition == 2 && player.x > 700)
+            else if (game.currentMapNumber == 1 && game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "Nz, pouštím Tě dál\nZískáváš 2 Xp";
                 game.storyPosition++;
@@ -603,7 +759,7 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 5 && game.storyPosition == 10 && player.X > 700)
             {
-                game.currentMessage = "Nenechám Tě jít jentak. Tady máš knihu dle které se můžeš naučit i speciální útok, kterým budeš moct ty zvířata porazit.";
+                game.currentMessage = "Nenechám Tě jít jen tak. Tady máš knihu dle které se můžeš naučit i speciální útok, kterým budeš moct ty zvířata porazit.";
                 game.storyPosition++;
             }
             else if (game.currentMapNumber == 5 && game.storyPosition == 11 && player.X > 700)
@@ -647,17 +803,74 @@ namespace Carrot
                         game.currentMessage = "\nOtevřela se Ti nová lokace";
                     }
                 }
+
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 12 && player.X > 600 && player.Lvl < 10)
+            {
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.storyPosition+=2;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            {
+                game.storyPosition += 2;
+                game.currentMessage = "Čau, co chceš?";
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 14 && game.storyPosition < 17 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 20 && game.storyPosition < 22 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 25 && game.storyPosition < 26 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 14 && game.storyPosition < 18 && player.X > 575)
+            {
+                game.currentMessage = "Tak jdi už.";
+                game.storyPosition = 30;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 22 && player.X > 575)
+            {
+                game.currentMessage = "Tak jdi už.";
+                game.storyPosition = 30;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 26 && player.X > 575)
+            {
+                game.currentMessage = "Tak jdi už.";
+                game.storyPosition = 30;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 30 && player.X > 575)
+            {
+                game.hasHoney = false;
+                game.hasApple = false;
+                game.hasBlueberry = false;
+                game.currentMessage = "Díky, kámo! Tak tady máš čapku!";
+                game.hasHat = true;
+                var bear = NPCList.First(x => x.Name == "MedVěd");
+                NPC bearTyped = (NPC)bear;
+                bearTyped.Sprite = "bear-no-hat.png";
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 5 && game.storyPosition == 31 && player.X > 700)
+            {
+                game.hasHat = false;
+                game.currentMessage = "Děkuji, mladíku!\nOdemkla se Ti nová lokace.";
+                game.storyPosition++;
+                game.currentMaxMapNumber++;
             }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            if (game.storyPosition == 1 && player.x > 700)
+            if (game.currentMapNumber == 1 && game.storyPosition == 1 && player.x > 700)
             {
                 game.currentMessage = "Achich ouvej, to bolí\nKdyž si Bulmíra praštil, sebral Ti jablko.";
                 game.hasApple = false;
             }
-            else if (game.storyPosition == 2 && player.x > 700)
+            else if (game.currentMapNumber == 1 && game.storyPosition == 2 && player.x > 700)
             {
                 game.currentMessage = "No jo, no jo, tak jdi dál\nZískáváš 2 Xp";
                 player.addXp(2);
@@ -712,6 +925,36 @@ namespace Carrot
                     }
                 }
             }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl < 10)
+            {
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.storyPosition++;
+            }
+            else if  (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            {
+                game.storyPosition = 20;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 15 && game.storyPosition < 17 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 14 && player.X > 575)
+            {
+                game.storyPosition = 20;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 20 && game.storyPosition < 22 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 25 && game.storyPosition < 26 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            if (game.currentMapNumber == 8 && (game.storyPosition == 17 || game.storyPosition == 22 || game.storyPosition == 26)  && player.X > 575)
+            {
+                game.currentMessage = "No tak to ani nezkoušej, kámo.";
+                game.storyPosition = 30;
+            }
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
@@ -738,8 +981,31 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 5 && game.storyPosition == 9 && player.X > 700)
             {
-                game.currentMessage = "Byl by jsi velice laskav. Najdi ho, prosím.";
+                game.currentMessage = "Byl by jsi velice laskav, kdyby si ho našel, prosím.";
                 game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl < 10)
+            {
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            {
+                game.storyPosition = 25;
+                game.currentMessage = "Nedám, kámo";
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 15 && game.storyPosition < 17 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 25 && game.storyPosition < 26 && player.X > 575)
+            {
+                game.storyPosition++;
+            }
+            else if (game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            {
+                game.storyPosition = 25;
+                game.currentMessage = "Nedám, kámo";
             }
         }
 
