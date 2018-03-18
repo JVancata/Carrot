@@ -25,7 +25,7 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        public Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        public Player player = new Player("Knedlik", "hrac", 100, 1, 1, 4);
         Random random = new Random();
         public int windowWidth = 1000;
         public int windowHeight = 350;
@@ -45,9 +45,9 @@ namespace Carrot
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
-            //game.currentMapNumber = 8;
-            //game.currentMaxMapNumber = 8;
-            //game.storyPosition = 13;
+            //game.currentMapNumber = 9;
+            //game.currentMaxMapNumber = 9;
+            //game.storyPosition = 32;
             //player.Lvl = 20;
             //game.hasHoney = true;
             //game.hasBlueberry = true;
@@ -79,6 +79,7 @@ namespace Carrot
             NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
             NPCList.Add(new NPC("Metzen", "npc", 5, 800, -25, 0, "wizard-no-hat.png", false, 120, 200));
             NPCList.Add(new NPC("MedVěd", "npc", 8, 750, -65, 0, "bear-hat.png", false, 170, 250));
+            NPCList.Add(new NPC("Karela", "npc", 9, 750, -15, 0, "princess.png", false, 110, 200));
 
             Monster vlk = new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png");
             vlk.Attack = new WolfAttack();
@@ -484,10 +485,64 @@ namespace Carrot
                         }
                         else if (game.storyPosition == 30 && game.hasApple && game.hasBlueberry && game.hasHoney)
                         {
-
                             Button1.Visibility = Visibility.Visible;
                             Button1.Content = "*podej mu to*";
                         }
+                    }
+                    break;
+                case 9:
+                    if (player.X > 700) player.X = 700;
+                    if(game.storyPosition == 32 && player.X > 650)
+                    {
+                        game.currentMessage = "Achjo, achjo, jsem smutná";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Proč?";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Nasere";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Ty jsi chlap?";
+                    }
+                    else if (game.storyPosition == 33 && player.X > 650)
+                    {
+                        game.currentMessage = "Můj vlk se ztratil a je někde sám, smutný";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Noa?";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Proč máš vousy?";
+                    }
+                    else if (game.storyPosition == 34 && player.X > 650)
+                    {
+                        game.currentMessage = "Ach, kéžby mi někdo dal naději, že můj miláček žije";
+                        if (game.princessDialogSaidWolfIsDead) game.currentMessage += "\n(notak, to jí neříkej, omg)";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Žije";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "Je mrtvej";
+                    }
+                    else if (game.storyPosition == 35 && player.X > 650)
+                    {
+                        game.currentMessage = "Opravdu, půvabný cizinče? Opravdu žije?";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Jo";
+                    }
+                    else if(game.storyPosition == 36 && player.X > 650)
+                    {
+                        game.currentMessage = "Och, děkuji! Dám Ti cokoli, co budeš chtít!";
+
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "Dej mi mrkev";
+                    }
+                    else if(game.storyPosition == 37 && game.hasCarrot)
+                    {
+                        game.currentMessage = "Získal jsi mrkev! Hra je u konce! Gratuluju!";
                     }
                     break;
                 default:
@@ -859,7 +914,21 @@ namespace Carrot
                 game.hasHat = false;
                 game.currentMessage = "Děkuji, mladíku!\nOdemkla se Ti nová lokace.";
                 game.storyPosition++;
+                var metzen = NPCList.First(x => x.Name == "Metzen");
+                NPC metzenTyped = (NPC)metzen;
+                metzenTyped.Sprite = "wizard-hat.png";
                 game.currentMaxMapNumber++;
+            }
+
+            else if(game.currentMapNumber == 9 && game.storyPosition >= 32 && game.storyPosition < 36 && player.X > 650)
+            {
+                game.storyPosition++;
+            }
+
+            else if (game.currentMapNumber == 9 && game.storyPosition == 36 && player.X > 650)
+            {
+                game.storyPosition++;
+                game.hasCarrot = true;
             }
         }
 
@@ -954,6 +1023,18 @@ namespace Carrot
             {
                 game.currentMessage = "No tak to ani nezkoušej, kámo.";
                 game.storyPosition = 30;
+            }
+            else if (game.currentMapNumber == 9 && game.storyPosition >= 32 && game.storyPosition < 34 && player.X > 650)
+            {
+                game.storyPosition++;
+            }
+            else if (game.currentMapNumber == 9 && game.storyPosition == 34 && player.X > 650)
+            {
+                game.princessDialogSaidWolfIsDead = true;
+            }
+            else if (game.currentMapNumber == 9 && game.storyPosition >= 34 && game.storyPosition < 35 && player.X > 650)
+            {
+                game.storyPosition++;
             }
         }
 
