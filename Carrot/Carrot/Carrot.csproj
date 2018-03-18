@@ -68,6 +68,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\BatAttack.cs" />
     <Compile Include="Classes\IAttack.cs" />
     <Compile Include="Classes\Creature.cs" />
     <Compile Include="Classes\Game.cs" />
@@ -117,7 +118,7 @@
     <Resource Include="assets\npc.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg2.png" />
+    <Resource Include="assets\bg\bg2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\character-kid.png" />
@@ -126,10 +127,10 @@
     <Resource Include="assets\Player\player-right.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg1.png" />
+    <Resource Include="assets\bg\bg1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg3.png" />
+    <Resource Include="assets\bg\bg3.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\vlk-1.png" />
@@ -144,13 +145,13 @@
     <Resource Include="assets\mama2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg0.png" />
+    <Resource Include="assets\bg\bg0.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg4.png" />
+    <Resource Include="assets\bg\bg4.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg5.png" />
+    <Resource Include="assets\bg\bg5.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\wizard-hat.png" />
@@ -169,7 +170,7 @@
     <Resource Include="assets\beehive\hive3.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="assets\bg6.png" />
+    <Resource Include="assets\bg\bg6.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\boar.png" />
@@ -178,6 +179,19 @@
     <Resource Include="assets\icons\apple.png" />
     <Resource Include="assets\icons\blueberry.png" />
     <Resource Include="assets\icons\honey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg\bg7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bg\bg8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\bear-hat.png" />
+    <Resource Include="assets\bear-no-hat.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

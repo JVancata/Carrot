@@ -25,7 +25,8 @@ namespace Carrot
     {
         public Game game = new Game();
         public string currentMap = "bg0.png";
-        static Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        public Player player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+        Random random = new Random();
         public int windowWidth = 1000;
         public int windowHeight = 350;
         public List<NPC> NPCList = new List<NPC>();
@@ -34,6 +35,7 @@ namespace Carrot
         public MainWindow()
         {
             InitializeComponent();
+            this.Title = "Carrot Quest - "+player.Name;
             player.Attack = new NormalAttack();
             fillNpc();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
@@ -43,8 +45,8 @@ namespace Carrot
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
-            //game.currentMapNumber = 5;
-            //game.currentMaxMapNumber = 6;
+            //game.currentMapNumber = 8;
+            //game.currentMaxMapNumber = 8;
             //game.storyPosition = 12;
             //timer
         }
@@ -72,20 +74,27 @@ namespace Carrot
             NPCList.Add(new NPC("Bulmír", "npc", 1, 800, 0, 0, "npc.png"));
             NPCList.Add(new NPC("Kiddo", "npc", 2, 500, 0, 0, "character-kid.png"));
             NPCList.Add(new NPC("Metzen", "npc", 5, 800, -25, 0, "wizard-no-hat.png", false, 120, 200));
+            NPCList.Add(new NPC("MedVěd", "npc", 8, 750, -65, 0, "bear-hat.png", false, 170, 250));
 
             Monster vlk = new Monster("Vlček", "monster", 3, 500, 20, 0, 10, 100, "vlk-1.png");
             vlk.Attack = new WolfAttack();
             MonsterList.Add(vlk);
 
-            Monster boar = new Monster("Boar", "monster", 6, 400, 20, 0, 10, 100, "boar.png", 80);
+            Monster boar = new Monster("Prase", "monster", 6, 400, 20, 0, 10, 100, "boar.png", 80);
             boar.Attack = new BoarAttack();
             MonsterList.Add(boar);
+
+            Monster bat = new Monster("Netopýr", "monster", 7, 400, -70, 0, 10, 100, "bat.png", 80);
+            bat.Attack = new BatAttack();
+            MonsterList.Add(bat);
+
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             CheckInputs();
             switchMaps();
             Render();
+            if (player.HP <= 0) resetGame();
         }
         public void switchMaps()
         {
@@ -149,6 +158,11 @@ namespace Carrot
             {
                 Button4.Visibility = Visibility.Visible;
                 Button4.Content = "*sněz jablko*";
+            }
+            if (game.hasHoney && game.storyPosition > 8 && player.HP < 100)
+            {
+                Button4.Visibility = Visibility.Visible;
+                Button4.Content = "*sněz med*";
             }
             switch (game.currentMapNumber)
             {
@@ -302,7 +316,7 @@ namespace Carrot
                     }
                     break;
                 case 6:
-                    //Debug.WriteLine("player: " + player.X);
+                    Debug.WriteLine("player: " + player.X);
                     //Debug.WriteLine("boar: " + MonsterList[1].X);
                     if (game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
                     {
@@ -311,6 +325,21 @@ namespace Carrot
 
                         Button2.Visibility = Visibility.Visible;
                         Button2.Content = "*kopni prase*";
+                    }//650 - 800
+                    else if (!game.hasHoney && game.killedBoars > 3 && game.storyPosition >= 12 && player.X > 650 && player.X < 800)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*seber med*";
+                    }
+                    break;
+                case 7:
+                    if (game.storyPosition >= 12 && player.X < MonsterList[2].X + 50 && MonsterList[2].X - 200 < player.X)
+                    {
+                        Button1.Visibility = Visibility.Visible;
+                        Button1.Content = "*udeř netopýra*";
+
+                        Button2.Visibility = Visibility.Visible;
+                        Button2.Content = "*kopni netopýra*";
                     }
                     break;
                 default:
@@ -342,6 +371,16 @@ namespace Carrot
                 return true;
             }
         }
+        public void resetGame()
+        {
+            game = new Game();
+            player = new Player("Knedlik", "hrac", 100, 1, 1, 10);
+            NPCList = new List<NPC>();
+            MonsterList = new List<Monster>();
+            player.Attack = new NormalAttack();
+            fillNpc();
+            game.currentMessage = "Umřels.";
+        }
         public void Render()
         {
             //Debug.WriteLine(player.X);
@@ -353,7 +392,7 @@ namespace Carrot
             Canvas.SetTop(PlayerHP, 140);
 
             Image bg = new Image();
-            bg.Source = new BitmapImage(new Uri(@"assets/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
+            bg.Source = new BitmapImage(new Uri(@"assets/bg/" + "bg" + game.currentMapNumber + ".png", UriKind.Relative));
             bg.Height = 350;
             //Panel.SetZIndex(bg, 1);
             Board.Children.Add(bg);
@@ -410,9 +449,8 @@ namespace Carrot
                 Canvas.SetTop(hive, 101);
                 Board.Children.Add(hive);
             }
-            if (game.currentMapNumber < 4 || game.currentMapNumber > 5)
+            if (game.currentMapNumber < 4 || game.currentMapNumber > 8)
             {
-
                 Image sun = new Image();
                 sun.Source = new BitmapImage(new Uri(@"assets/sun/" + "sun" + ((int)Math.Floor((double)(frame / 25))) + ".png", UriKind.Relative));
                 sun.Width = 100;
@@ -424,6 +462,7 @@ namespace Carrot
             {
                 frame = 0;
             }
+
             Canvas.SetLeft(playerImg, player.X);
             Canvas.SetTop(playerImg, player.Y + 150);
             Panel.SetZIndex(playerImg, 100);
@@ -442,7 +481,19 @@ namespace Carrot
                     Board.Children.Add(image);
                 }
             }
-
+            /*try
+            {
+                var elements = MainCanvas.Children;
+                foreach (Object child in elements)
+                {
+                    if (child is ProgressBar)
+                    {
+                        ProgressBar bar = (ProgressBar)child;
+                        MainCanvas.Children.Remove(bar);
+                    }
+                }
+            }
+            catch { }*/
             foreach (Monster monster in MonsterList)
             {
                 if (monster.Map == game.currentMapNumber && monster.HP > 0)
@@ -452,7 +503,26 @@ namespace Carrot
                     image.Height = monster.Height;
                     Canvas.SetLeft(image, monster.X);
                     Canvas.SetTop(image, monster.Y + 150);
+
+                   /* ProgressBar hpBar = new ProgressBar
+                    {
+                        Minimum = 0,
+                        Maximum = monster.MaxHp,
+                        Value = monster.HP,
+                        Width = 60,
+                        Height = 8,
+                        Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFD18484")),
+                        Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFC20505")),
+                        BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFD18484"))
+                    };
+                    Canvas.SetLeft(hpBar, 50);
+                    Canvas.SetTop(hpBar, 50);
+                    Panel.SetZIndex(hpBar, 1000);
+                    MainCanvas.Children.Add(hpBar);*/
+
                     Board.Children.Add(image);
+                                       
+
                 }
             }
             int neededXp = (int)Math.Pow(player.Lvl, 2);
@@ -546,11 +616,38 @@ namespace Carrot
             else if (game.currentMapNumber == 6 && game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
             {
                 bool result = BattleSystemClick(MonsterList[1], player, 10, 0);
-                if (result) game.killedBoars++;
+                if (result) {
+                    game.killedBoars++;
+                    game.currentMessage += "\nZjevilo se nové";
+                    MonsterList[1].HP = 100;
+                    MonsterList[1].X = random.Next(100, 600);
+                    if (game.killedBoars >= 5 && game.currentMaxMapNumber == 6) {
+                        game.currentMaxMapNumber++;
+                        game.currentMessage = "\nOtevřela se Ti nová lokace";
+                    }
+                }
             }
-
-
-            
+            else if (game.currentMapNumber == 6 && game.killedBoars > 0 && game.storyPosition >= 12 && player.X > 650 && player.X < 800)
+            {
+                game.hasHoney = true;
+                game.currentMessage = "Sebral jsi med";
+            }
+            else if (game.currentMapNumber == 7 && game.storyPosition >= 12 && player.X < MonsterList[2].X + 50 && MonsterList[2].X - 200 < player.X)
+            {
+                bool result = BattleSystemClick(MonsterList[2], player, 10, 0);
+                if (result)
+                {
+                    game.killedBats++;
+                    game.currentMessage += "\nZjevil se nový";
+                    MonsterList[2].HP = 100;
+                    MonsterList[2].X = random.Next(100, 600);
+                    if (game.killedBats >= 5 && game.currentMaxMapNumber == 7)
+                    {
+                        game.currentMaxMapNumber++;
+                        game.currentMessage = "\nOtevřela se Ti nová lokace";
+                    }
+                }
+            }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -586,7 +683,34 @@ namespace Carrot
             else if (game.currentMapNumber == 6 && game.storyPosition >= 12 && player.X < MonsterList[1].X + 50 && MonsterList[1].X - 200 < player.X)
             {
                 bool result = BattleSystemClick(MonsterList[1], player, 10, 1);
-                if (result) game.killedBoars++;
+                if (result)
+                {
+                    game.killedBoars++;
+                    game.currentMessage += "\nZjevilo se nové";
+                    MonsterList[1].HP = 100;
+                    MonsterList[1].X = random.Next(100, 600);
+                    if (game.killedBoars >= 5 && game.currentMaxMapNumber == 6)
+                    {
+                        game.currentMaxMapNumber++;
+                        game.currentMessage = "\nOtevřela se Ti nová lokace";
+                    }
+                }
+            }
+            else if (game.currentMapNumber == 7 && game.storyPosition >= 12 && player.X < MonsterList[2].X + 50 && MonsterList[2].X - 200 < player.X)
+            {
+                bool result = BattleSystemClick(MonsterList[2], player, 10, 1);
+                if (result)
+                {
+                    game.killedBats++;
+                    game.currentMessage += "\nZjevil se nový";
+                    MonsterList[2].HP = 100;
+                    MonsterList[2].X = random.Next(100, 600);
+                    if (game.killedBats >= 5 && game.currentMaxMapNumber == 7)
+                    {
+                        game.currentMaxMapNumber++;
+                        game.currentMessage = "\nOtevřela se Ti nová lokace";
+                    }
+                }
             }
         }
 
@@ -638,6 +762,13 @@ namespace Carrot
             }
 
             //everything else should be above the eating
+            //eating honey
+            else if (game.storyPosition > 8 && game.hasHoney && player.HP < 100)
+            {
+                game.currentMessage = "Snědl jsi med. Obnovil Ti 25% zdraví.";
+                game.hasHoney = false;
+                player.addHp(25);
+            }
             //eating apple
             else if (game.storyPosition > 8 && game.hasApple && player.HP < 100)
             {

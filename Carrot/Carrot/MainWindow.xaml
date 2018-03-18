@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Carrot"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="1000">
-    <Canvas>
+    <Canvas x:Name="MainCanvas">
         <Button x:Name="Button1" Content="Nazdar" Canvas.Left="20" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button1_Click"></Button>
         <Button x:Name="Button2" Content="Nazdar" Canvas.Left="270" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button2_Click"/>
         <Button x:Name="Button3" Content="Nazdar" Canvas.Left="520" Canvas.Top="266" Height="45" Width="200" Panel.ZIndex="100" Click="Button3_Click"/>

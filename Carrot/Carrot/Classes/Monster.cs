@@ -15,6 +15,7 @@ namespace Carrot
         private string defaultPath = "assets/";
         private int dmg;
         private int hp;
+        private int maxHp;
         private int map;
         private IAttack attack;
         private int width;
@@ -25,6 +26,7 @@ namespace Carrot
             this.height = height;
             this.name = name;
             this.type = type;
+            this.maxHp = hp;
             this.x = x;
             this.y = y;
             this.z = z;
@@ -185,6 +187,17 @@ namespace Carrot
             set
             {
                 this.height = value;
+            }
+        }
+        public int MaxHp
+        {
+            get
+            {
+                return this.maxHp;
+            }
+            set
+            {
+                this.maxHp = value;
             }
         }
     }
