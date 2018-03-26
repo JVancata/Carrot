@@ -45,14 +45,14 @@ namespace Carrot
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
-            game.currentMapNumber = 7;
+            /*game.currentMapNumber = 7;
             game.currentMaxMapNumber = 8;
             game.storyPosition = 12;
             player.Lvl = 9;
             player.XP = 80;
             game.hasHoney = true;
             game.hasBlueberry = true;
-            game.hasApple = true;
+            game.hasApple = true;*/
             //timer
         }
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
