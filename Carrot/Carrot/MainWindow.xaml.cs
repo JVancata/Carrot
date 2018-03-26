@@ -45,13 +45,14 @@ namespace Carrot
             TimeSpan interval = TimeSpan.FromMilliseconds(10);
             dispatcherTimer.Interval = interval;
             dispatcherTimer.Start();
-            //game.currentMapNumber = 9;
-            //game.currentMaxMapNumber = 9;
-            //game.storyPosition = 32;
-            //player.Lvl = 20;
-            //game.hasHoney = true;
-            //game.hasBlueberry = true;
-            //game.hasApple = true;
+            game.currentMapNumber = 7;
+            game.currentMaxMapNumber = 8;
+            game.storyPosition = 12;
+            player.Lvl = 9;
+            player.XP = 80;
+            game.hasHoney = true;
+            game.hasBlueberry = true;
+            game.hasApple = true;
             //timer
         }
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -357,7 +358,7 @@ namespace Carrot
                     {
                         player.X = 700;
                     }
-                    if(game.storyPosition == 12 && player.X > 600)
+                    if(game.storyPosition == 12 && player.X > 575)
                     {
                         game.currentMessage = "Brum brum, jsem MedVěd";
 
@@ -370,7 +371,7 @@ namespace Carrot
                         Button3.Visibility = Visibility.Visible;
                         Button3.Content = "Dej sem ten čepec!";
                     }
-                    if (game.storyPosition == 14 && player.X > 600 && player.Lvl >= 10)
+                    if (game.storyPosition == 13 && player.X > 575 && player.Lvl >= 10)
                     {
                         game.currentMessage = "No, to je lepší! Já jsem MedVěd!";
 
@@ -862,15 +863,15 @@ namespace Carrot
             }
             else if (game.currentMapNumber == 8 && game.storyPosition == 12 && player.X > 600 && player.Lvl < 10)
             {
-                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nenaexpeným noobem se ani nebudu bavit.";
                 game.storyPosition+=2;
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            else if (game.currentMapNumber == 8 && (game.storyPosition == 12 || game.storyPosition == 13) && player.X > 600 && player.Lvl >= 10)
             {
-                game.storyPosition += 2;
+                game.storyPosition = 15;
                 game.currentMessage = "Čau, co chceš?";
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition >= 14 && game.storyPosition < 17 && player.X > 575)
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 14 && game.storyPosition < 17 && player.X > 575 && player.Lvl >= 10)
             {
                 game.storyPosition++;
             }
@@ -897,7 +898,7 @@ namespace Carrot
                 game.currentMessage = "Tak jdi už.";
                 game.storyPosition = 30;
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition == 30 && player.X > 575)
+            else if (game.currentMapNumber == 8 && game.storyPosition == 30 && player.X > 575 && game.hasApple && game.hasBlueberry && game.hasHoney)
             {
                 game.hasHoney = false;
                 game.hasApple = false;
@@ -994,16 +995,16 @@ namespace Carrot
                     }
                 }
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl < 10)
+            else if (game.currentMapNumber == 8 && game.storyPosition == 12 && player.X > 600 && player.Lvl < 10)
             {
-                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nenaexpeným noobem se ani nebudu bavit.";
                 game.storyPosition++;
             }
-            else if  (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            else if  (game.currentMapNumber == 8 && (game.storyPosition == 13 || game.storyPosition == 12 ) && player.X > 600 && player.Lvl >= 10)
             {
                 game.storyPosition = 20;
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition >= 15 && game.storyPosition < 17 && player.X > 575)
+            else if (game.currentMapNumber == 8 && game.storyPosition >= 15 && game.storyPosition < 17 && player.X > 575 && player.Lvl >= 10)
             {
                 game.storyPosition++;
             }
@@ -1019,7 +1020,7 @@ namespace Carrot
             {
                 game.storyPosition++;
             }
-            if (game.currentMapNumber == 8 && (game.storyPosition == 17 || game.storyPosition == 22 || game.storyPosition == 26)  && player.X > 575)
+            else if (game.currentMapNumber == 8 && (game.storyPosition == 17 || game.storyPosition == 22 || game.storyPosition == 26)  && player.X > 575)
             {
                 game.currentMessage = "No tak to ani nezkoušej, kámo.";
                 game.storyPosition = 30;
@@ -1065,12 +1066,12 @@ namespace Carrot
                 game.currentMessage = "Byl by jsi velice laskav, kdyby si ho našel, prosím.";
                 game.storyPosition++;
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl < 10)
+            else if (game.currentMapNumber == 8 && game.storyPosition == 12 && player.X > 600 && player.Lvl < 10)
             {
-                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nezkušeným noobem se ani nebudu bavit.";
+                game.currentMessage = "Pff, kdo vůbec jsi? S takovým nenaexpeným noobem se ani nebudu bavit.";
                 game.storyPosition++;
             }
-            else if (game.currentMapNumber == 8 && game.storyPosition == 13 && player.X > 600 && player.Lvl >= 10)
+            else if (game.currentMapNumber == 8 && (game.storyPosition == 13 ||game.storyPosition == 12) && player.X > 600 && player.Lvl >= 10)
             {
                 game.storyPosition = 25;
                 game.currentMessage = "Nedám, kámo";
